@@ -1,0 +1,269 @@
+# Der Name und die Anzeigeinformation des Realms
+realm: "customer"
+displayName: "Nutzerkonten-Anbindung"
+displayNameHtml: "<div class=\"kc-logo-text\"><span>Nutzerkonten-Anbindung</span></div>"
+
+# Aktiviere den Realm
+enabled: true
+
+# Verbiete die Selbstverwaltung von Nutzer:innen
+userManagedAccessAllowed: false
+# Verbiete die Nutzung von Organisationen
+organizationsEnabled: false
+# Verbiete die Nutzung von Keycloak-Administrator-Rechten durch Nutzer:innen
+adminPermissionsEnabled: false
+
+# Verbiete die Registrierung neuer Nutzer:innen sodass nur Administrator:innen Nutzer:innen anlegen können
+registrationAllowed: false
+# Verbiete das Zurücksetzen von Passwörtern durch Nutzer:innen
+resetPasswordAllowed: false
+# Verbiete die Option "Remember Me" im Login-Formular
+rememberMe: false
+
+# Verbiete Logins über E-Mail-Adressen da hier nur Logins über die Identity Provider erlaubt sind
+registrationEmailAsUsername: false
+loginWithEmailAllowed: false
+verifyEmail: false
+duplicateEmailsAllowed: true
+editUsernameAllowed: false
+
+# Setze die SMTP-Einstellungen für den E-Mail-Versand
+smtpServer:
+  host: "$(env:SMTP_HOST)"
+  port: "$(env:SMTP_PORT)"
+  user: "$(env:SMTP_USERNAME)"
+  password: "$(env:SMTP_PASSWORD)"
+  auth: "true"
+  starttls: "true"
+  ssl: "false"
+  replyTo: ""
+  replyToDisplayName: ""
+  from: "$(env:SMTP_FROM)"
+  fromDisplayName: "$(env:SMTP_FROM_DISPLAY)"
+  envelopeFrom: ""
+
+# Setze die Themes für den Realm damit das Corporate Design verwendet wird
+loginTheme: "gover"
+accountTheme: "gover"
+adminTheme: "gover"
+emailTheme: "keycloak"
+
+# Setze Lokalisierungseinstellungen damit deutsche Texte verwendet werden
+internationalizationEnabled: true
+supportedLocales:
+  - "de"
+  - "en"
+defaultLocale: "de"
+
+# Setze die Brute Force Richtlinien
+bruteForceProtected: true # Aktiviert den Brute-Force-Schutz
+permanentLockout: false   # Setzt den Brute-Force-Schutz auf temporär
+maxTemporaryLockouts: 0   # Unbegrenzt viele temporäre Sperrungen
+failureFactor: 30 # Die Anzahl der Fehlversuche bevor eine temporäre Sperrung erfolgt
+bruteForceStrategy: "MULTIPLE"
+waitIncrementSeconds: 60 # 1 Minute
+maxFailureWaitSeconds: 900 # 15 Minuten
+maxDeltaTimeSeconds: 43200 # 12 Stunden
+quickLoginCheckMilliSeconds: 1000 # 1 Sekunde
+minimumQuickLoginWaitSeconds: 60 # 1 Minute
+
+# Setzte die Session Einstellungen um Kund:innen nicht unnötig oft abzumelden
+ssoSessionIdleTimeout: 1800 # 30 Minuten
+ssoSessionMaxLifespan: 36000 # 10 Stunden
+ssoSessionIdleTimeoutRememberMe: 0 # Remember Me ist deaktiviert
+ssoSessionMaxLifespanRememberMe: 0 # Remember Me ist deaktiviert
+accessCodeLifespan: 60 # 1 Minute
+accessCodeLifespanLogin: 1800 # 30 Minuten
+accessCodeLifespanUserAction: 300 # 5 Minuten
+accessTokenLifespan: 300 # 5 Minuten
+accessTokenLifespanForImplicitFlow: 900 # 15 Minuten
+
+# Setze die KeyProvider auf RSA 4096 für die Nutzerkontenanbindung
+components:
+  "org.keycloak.keys.KeyProvider":
+    - name: "rsa-generated-4096"
+      providerId: "rsa-generated"
+      subComponents: { }
+      config:
+        keySize:
+          - "4096"
+        active:
+          - "true"
+        priority:
+          - "900"
+        enabled:
+          - "true"
+        algorithm:
+          - "RS256"
+    - name: "rsa-enc-generated-4096"
+      providerId: "rsa-enc-generated"
+      subComponents: { }
+      config:
+        keySize:
+          - "4096"
+        active:
+          - "true"
+        priority:
+          - "900"
+        enabled:
+          - "true"
+        algorithm:
+          - "RSA-OAEP"
+
+# Authentication Flow
+authenticationFlows:
+  - alias: "first-broker-servicekonto-login"
+    description: "Erster Login über IDP oder Servicekonto"
+    providerId: "basic-flow"
+    topLevel: true
+    builtIn: false
+    authenticationExecutions:
+      - authenticator: "idp-create-user-if-unique"
+        requirement: "REQUIRED"
+        priority: 0
+        autheticatorFlow: false
+        userSetupAllowed: false
+
+# Erstelle die Client-Scopes für die IDPs
+clientScopes:
+  {% for level in stork %}
+  - name: "{{ level.scope }}"
+    description: "{{ level.label }}"
+    protocol: "openid-connect"
+    attributes: { }
+    protocolMappers: [ ]
+  {% endfor %}
+  {% for idp in idps %}
+  - name: "{{ idp.alias }}"
+    description: "Scope for IDP {{ idp.alias }}"
+    protocol: "openid-connect"
+    attributes: { }
+    protocolMappers:
+      {% for attribute in idp.attributes %}
+      - name: "{{ attribute.user_attribute_name }}"
+        protocol: "openid-connect"
+        protocolMapper: "oidc-usermodel-attribute-mapper"
+        consentRequired: false
+        config:
+          user.attribute: "{{ attribute.user_attribute_name }}"
+          id.token.claim: "true"
+          access.token.claim: "true"
+          claim.name: "{{ attribute.user_attribute_name }}"
+          jsonType.label: "String"
+          userinfo.token.claim: "true"
+     {% endfor %}
+  {% endfor %}
+
+# Lege die Clients für den Realm an
+clients:
+  # Der App-Client wird von der Gover Kund:innen App verwendet, um Kund:innen zu authentifizieren.
+  - enabled: true
+    protocol: "openid-connect"
+    clientId: app
+    name: "App Zugriff"
+    description: "Zugriff für App-Nutzer:innen"
+    alwaysDisplayInConsole: false
+    rootUrl: "$(env:HOSTNAME)"
+    baseUrl: "$(env:HOSTNAME)"
+    redirectUris:
+      - "$(env:HOSTNAME)/api/public/identity/*/start/"
+    webOrigins:
+      - "$(env:HOSTNAME)/api/public/identity/*/callback"
+    defaultClientScopes:
+      - "roles"
+      - "profile"
+      - "email"
+    optionalClientScopes:
+    {% for idp in idps %}
+      - "{{ idp.alias }}"
+    {% endfor %}
+    {% for level in stork %}
+      - "{{ level.scope }}"
+    {% endfor %}
+    publicClient: true # Setzt "Client authentication" auf False
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: false
+    serviceAccountsEnabled: false
+    frontchannelLogout: true
+    attributes:
+      standard.token.exchange.enabled: false # Setzt "Standard Token Exchange" auf False
+      oidc.ciba.grant.enabled: false # Setzt "OIDC CIBA Grant" auf False
+      oauth2.device.authorization.grant.enabled: false # Setzt "OAuth2 Device Authorization Grant" auf False
+      frontchannel.logout.session.required: true # Setzt "Frontchannel Logout Session Required" auf True
+
+identityProviders:
+  {% for idp in idps %}
+  {% for env in idp.envs %}
+  - enabled: true
+    providerId: "saml"
+    alias: "{{ idp.alias }}-{{ env.alias }}"
+    displayName: "{{ idp.name }} ({{ env.name }})"
+    config:
+      idpEntityId: "{{ env.entity_id }}"
+      singleSignOnServiceUrl: "{{ env.single_sign_on_url }}"
+      {% if env.single_logout_url is not none %}singleLogoutServiceUrl: "{{ env.single_logout_url }}"{% endif %}
+      backchannelSupported: "false"
+      sendIdTokenOnLogout: "true"
+      sendClientIdOnLogout: "false"
+      nameIDPolicyFormat: "{{ idp.name_id_policy_format }}"
+      principalType: "{{ idp.principal_type }}"
+      principalAttribute: "{{ idp.principal_attribute }}"
+      allowCreate: "{{ idp.allow_create }}"
+      postBindingResponse: "true"
+      artifactBindingResponse: "false"
+      postBindingAuthnRequest: "true"
+      postBindingLogout: "{{ idp.post_binding_logout }}"
+      wantAuthnRequestsSigned: "true"
+      signatureAlgorithm: "{{ idp.signature_algorithm }}"
+      xmlSigKeyInfoKeyNameTransformer: "KEY_ID"
+      wantAssertionsSigned: "{{ idp.want_assertions_signed }}"
+      wantAssertionsEncrypted: "{{ idp.want_assertions_encrypted }}"
+      {% if idp.want_assertions_encrypted %}encryptionAlgorithm: "RSA-OAEP"{% endif %}
+      forceAuthn: "true"
+      validateSignature: "true"
+      metadataDescriptorUrl: "{{ env.metadata_descriptor_url }}"
+      useMetadataDescriptorUrl: "false"
+      signSpMetadata: "false"
+      authnContextComparisonType: "exact"
+      doNotStoreUsers: "true"
+      caseSensitiveOriginalUsername: "false"
+    trustEmail: true
+    firstBrokerLoginFlowAlias: "first-broker-servicekonto-login"
+  {% endfor %}
+  {% endfor %}
+
+identityProviderMappers:
+  {% for idp in idps %}
+  {% for env in idp.envs %}
+  {% for attribute in idp.attributes %}
+  - name: "{{ attribute.user_attribute_name }}"
+    identityProviderAlias: "{{ idp.alias }}-{{ env.alias }}"
+    {% if attribute.attribute_format == 'uri' %}
+    identityProviderMapper: "saml-user-attribute-idp-mapper"
+    {% endif %}
+    {% if attribute.attribute_format == 'xpath' %}
+    identityProviderMapper: "saml-xpath-attribute-idp-mapper"
+    {% endif %}
+    config:
+      syncMode: INHERIT
+
+      user.attribute: "{{ attribute.user_attribute_name }}"
+      attribute.name: "{{ attribute.attribute_name }}"
+
+      {% if attribute.attribute_format == 'uri' %}
+      attribute.name.format: "ATTRIBUTE_FORMAT_URI"
+      {% endif %}
+      {% if attribute.attribute_format == 'basic' %}
+      attribute.name.format: "ATTRIBUTE_FORMAT_BASIC"
+      {% endif %}
+
+      {% if attribute.attribute_format == 'uri' %}
+      attribute.friendly.name: "{{ attribute.friendly_name }}"
+      {% endif %}
+      {% if attribute.attribute_format == 'xpath' %}
+      attribute.xpath: "{{ attribute.friendly_name }}"
+      {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {% endfor %}

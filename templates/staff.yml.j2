@@ -1,0 +1,187 @@
+# Der Name und die Anzeigeinformation des Realms
+realm: "staff"
+displayName: "Gover Mitarbeiter:innen"
+displayNameHtml: "<div class=\"kc-logo-text\"><span>Gover Mitarbeiter:innen</span></div>"
+
+# Aktiviere den Realm
+enabled: true
+
+# Verbiete die Selbstverwaltung von Nutzer:innen
+userManagedAccessAllowed: false
+# Verbiete die Nutzung von Organisationen
+organizationsEnabled: false
+# Verbiete die Nutzung von Keycloak-Administrator-Rechten durch Nutzer:innen
+adminPermissionsEnabled: false
+
+# Verbiete die Registrierung neuer Nutzer:innen sodass nur Administrator:innen Nutzer:innen anlegen können
+registrationAllowed: false
+# Verbiete das Zurücksetzen von Passwörtern durch Nutzer:innen
+resetPasswordAllowed: false
+# Verbiete die Option "Remember Me" im Login-Formular
+rememberMe: false
+
+# Erlaube Logins ausschließlich per E-Mail-Adresse
+registrationEmailAsUsername: true
+loginWithEmailAllowed: true
+verifyEmail: true
+duplicateEmailsAllowed: false
+# Erlaube die Bearbeitung des Nutzernamens durch Nutzer:innen damit diese eigenständig Ihre E-Mail-Adresse ändern können.
+# Dies ist notwendig, da wir die E-Mail-Adresse als Nutzernamen verwenden.
+editUsernameAllowed: true
+
+# Setze die SMTP-Einstellungen für den E-Mail-Versand
+smtpServer:
+  host: "$(env:SMTP_HOST)"
+  port: "$(env:SMTP_PORT)"
+  user: "$(env:SMTP_USERNAME)"
+  password: "$(env:SMTP_PASSWORD)"
+  auth: "true"
+  starttls: "true"
+  ssl: "false"
+  replyTo: ""
+  replyToDisplayName: ""
+  from: "$(env:SMTP_FROM)"
+  fromDisplayName: "$(env:SMTP_FROM_DISPLAY)"
+  envelopeFrom: ""
+
+# Setze die Themes für den Realm damit das Corporate Design verwendet wird
+loginTheme: "gover"
+accountTheme: "gover"
+adminTheme: "gover"
+emailTheme: "keycloak"
+
+# Setze Lokalisierungseinstellungen damit deutsche Texte verwendet werden
+internationalizationEnabled: true
+supportedLocales:
+  - "de"
+  - "en"
+defaultLocale: "de"
+
+# Setze die Brute Force Richtlinien
+bruteForceProtected: true # Aktiviert den Brute-Force-Schutz
+permanentLockout: false   # Setzt den Brute-Force-Schutz auf temporär
+maxTemporaryLockouts: 0   # Unbegrenzt viele temporäre Sperrungen
+failureFactor: 30 # Die Anzahl der Fehlversuche bevor eine temporäre Sperrung erfolgt
+bruteForceStrategy: "MULTIPLE"
+waitIncrementSeconds: 60 # 1 Minute
+maxFailureWaitSeconds: 900 # 15 Minuten
+maxDeltaTimeSeconds: 43200 # 12 Stunden
+quickLoginCheckMilliSeconds: 1000 # 1 Sekunde
+minimumQuickLoginWaitSeconds: 60 # 1 Minute
+
+# Setzte die Session Einstellungen um Mitarbeiter:innen nicht unnötig oft abzumelden
+ssoSessionIdleTimeout: 1800 # 30 Minuten
+ssoSessionMaxLifespan: 36000 # 10 Stunden
+ssoSessionIdleTimeoutRememberMe: 0 # Remember Me ist deaktiviert
+ssoSessionMaxLifespanRememberMe: 0 # Remember Me ist deaktiviert
+accessCodeLifespan: 60 # 1 Minute
+accessCodeLifespanLogin: 1800 # 30 Minuten
+accessCodeLifespanUserAction: 300 # 5 Minuten
+accessTokenLifespan: 300 # 5 Minuten
+accessTokenLifespanForImplicitFlow: 900 # 15 Minuten
+
+# Lege Rollen für den Realm an
+roles:
+  realm:
+    # Die Admin-Rolle wird benötigt um in Gover als Administrator:in zu agieren.
+    # Sie sollte alle notwendigen Rechte besitzen um Nutzer:innen, Clients, Rollen und Identity Provider zu verwalten.
+    - name: "admin"
+      description: "Administrator:in mit Vollzugriff"
+      composite: true
+      composites:
+        client:
+          realm-management:
+            - "query-users"
+            - "manage-events"
+            - "query-clients"
+            - "view-realm"
+            - "manage-identity-providers"
+            - "view-clients"
+            - "impersonation"
+            - "create-client"
+            - "manage-realm"
+            - "manage-users"
+            - "realm-admin"
+            - "view-identity-providers"
+            - "view-users"
+            - "query-groups"
+            - "manage-authorization"
+            - "view-authorization"
+            - "view-events"
+            - "manage-clients"
+            - "query-realms"
+      clientRole: false
+      attributes: { }
+
+# Lege die Clients für den Realm an
+clients:
+  # Der Backend-Client wird von den Backend-Services verwendet, um auf Keycloak zuzugreifen.
+  # Er besitzt keine Login-Möglichkeiten und ist ausschließlich für die Client-Credentials Authentifizierung konfiguriert.
+  - enabled: true
+    protocol: "openid-connect"
+    clientId: "backend"
+    name: "Backend Zugriff"
+    description: "Zugriff für Backend-Services"
+    alwaysDisplayInConsole: false
+    rootUrl: "$(env:HOSTNAME)"
+    redirectUris:
+      - "*"
+    webOrigins:
+      - "*"
+    publicClient: false # Setzt "Client authentication" auf True
+    standardFlowEnabled: false
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: false
+    serviceAccountsEnabled: true
+    frontchannelLogout: false
+    clientAuthenticatorType: "client-secret"
+    secret: "$(env:BACKEND_CLIENT_SECRET)"
+    attributes:
+      standard.token.exchange.enabled: false # Setzt "Standard Token Exchange" auf False
+      oidc.ciba.grant.enabled: false # Setzt "OIDC CIBA Grant" auf False
+      oauth2.device.authorization.grant.enabled: false # Setzt "OAuth2 Device Authorization Grant" auf False
+
+  # Der App-Client wird von der Gover Mitarbeiter:innen App verwendet, um Nutzer:innen zu authentifizieren.
+  # Er besitzt Login-Möglichkeiten und ist für den Authorization Code Flow konfiguriert.
+  - enabled: true
+    protocol: "openid-connect"
+    clientId: app
+    name: "App Zugriff"
+    description: "Zugriff für App-Nutzer:innen"
+    alwaysDisplayInConsole: false
+    rootUrl: "$(env:HOSTNAME)/staff"
+    baseUrl: "$(env:HOSTNAME)/staff"
+    redirectUris:
+      - "$(env:HOSTNAME)/staff/*"
+    webOrigins:
+      - "$(env:HOSTNAME)/staff/*"
+    defaultClientScopes:
+      - "roles"
+      - "profile"
+      - "email"
+    publicClient: true # Setzt "Client authentication" auf False
+    standardFlowEnabled: true
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: false
+    serviceAccountsEnabled: false
+    frontchannelLogout: true
+    attributes:
+      standard.token.exchange.enabled: false # Setzt "Standard Token Exchange" auf False
+      oidc.ciba.grant.enabled: false # Setzt "OIDC CIBA Grant" auf False
+      oauth2.device.authorization.grant.enabled: false # Setzt "OAuth2 Device Authorization Grant" auf False
+      frontchannel.logout.session.required: true # Setzt "Frontchannel Logout Session Required" auf True
+
+# Erzeuge Users für die Service-Accounts der Clients
+users:
+  - username: "service-account-backend"
+    emailVerified: false
+    enabled: true
+    totp: false
+    serviceAccountClientId: "backend"
+    disableableCredentialTypes: [ ]
+    requiredActions: [ ]
+    realmRoles:
+      - "default-roles-staff"
+    clientRoles: { }
+    notBefore: 0
+    groups: [ ]

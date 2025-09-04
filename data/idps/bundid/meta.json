@@ -1,0 +1,23 @@
+{
+    "alias": "bundid",
+    "name": "BundID",
+    "use_stork": true,
+    "envs": [
+        {
+            "alias": "prod",
+            "name": "Produktion",
+            "entity_id": "https://id.bund.de/idp",
+            "metadata_descriptor_url": "https://id.bund.de/idp",
+            "single_sign_on_url": "https://id.bund.de/idp/profile/SAML2/POST/SSO",
+            "single_logout_url": null
+        }
+    ],
+    "name_id_policy_format": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+    "principal_type": "ATTRIBUTE",
+    "principal_attribute": "urn:oid:1.3.6.1.4.1.25484.494450.3",
+    "want_assertions_encrypted": true,
+    "want_assertions_signed": false,
+    "post_binding_logout": false,
+    "allow_create": false,
+    "signature_algorithm": "RSA_SHA256_MGF1"
+}
