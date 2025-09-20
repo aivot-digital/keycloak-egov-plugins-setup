@@ -1,0 +1,35 @@
+label,user_attribute_name,attribute_format,friendly_name,attribute_name
+Telefonnummer,telephone,basic,Telephone,Telephone
+Registernummer,orgRegisterNumber,xpath,//q1:CommercialRegistrationNumber,LegalEntity
+Unternehmensanschrift: Postfach-Postleitzahl,orgPostboxZipCode,xpath,//q1:PostofficeBox//q1:ZipCode,LegalEntity
+Anschrift Privatperson: Postleitzahl,zipCode,xpath,//p3:ZipCode,PlaceOfResidence
+Unternehmen: Telefonnummer,orgContactPhone,xpath,//q1:Telephone,LegalEntity
+Identitätstyp,dataportIdentitaetstyp,basic,PrincipalType,PrincipalType
+Nachname,lastName,basic,FamilyNames,FamilyNames
+Geburtsdatum,dateOfBirth,basic,DateOfBirth,DateOfBirth
+Firmenname,orgCompanyName,xpath,//q1:OrganizationName,LegalEntity
+Unternehmensanschrift: Ort,orgCity,xpath,//q1:Address//q1:City,LegalEntity
+Anschrift Privatperson: Land,country,xpath,//p3:Country,PlaceOfResidence
+DatenuebermittlerPseudonymId,elsterDatenuebermittlerPseudonymID,xpath,//q1:ForeignId,LegalEntity
+Unternehmenseinheit,orgOrganizationUnit,xpath,//q1:OrganizationUnit,LegalEntity
+Anschrift Privatperson: Ort,city,xpath,//p3:City,PlaceOfResidence
+Favorisierte Sprache,preferredLanguage,basic,Language,Language
+Unternehmensanschrift: Straße und Hausnummer,orgStreetAndBuilding,xpath,//q1:Address//q1:StreetAddress,LegalEntity
+Unternehmensanschrift: Postfach-Nummer,orgPostboxNumber,xpath,//q1:PostofficeBox//q1:PostboxNumber,LegalEntity
+Akademischer Titel,title,basic,AcademicTitle,AcademicTitle
+Postfach,dataportInboxID,basic,InboxReference,InboxReference
+Registergericht,orgRegisterCourt,xpath,//q1:CommercialRegistrationCourt,LegalEntity
+Unternehmensanschrift: Postfach-Land,orgPostboxCountry,xpath,//q1:PostofficeBox//q1:Country,LegalEntity
+Unternehmensanschrift: Postleitzahl,orgZipCode,xpath,//q1:Address//q1:ZipCode,LegalEntity
+Unternehmensanschrift: Land,orgCountry,xpath,//q1:Address//q1:Country,LegalEntity
+Mobiltelefonnummer,mobilephone,basic,Cellphone,Cellphone
+Geburtsname,birthName,basic,BirthName,BirthName
+Geschlecht,gender,basic,Gender,Gender
+Anrede,salutation,basic,Title,Title
+Vertrauensniveau,trustLevelAuthentication,basic,AssuranceLevel,AssuranceLevel
+Anschrift Privatperson: Straße und Hausnummer,streetAndBuilding,xpath,//p3:StreetAddress,PlaceOfResidence
+Vorname(n),firstName,basic,GivenNames,GivenNames
+Geburtsort,placeOfBirth,xpath,//p3:Freetext,PlaceOfBirth
+Unternehmen: E-Mail-Adresse,orgContactMail,xpath,//q1:EmailAddress,LegalEntity
+E-Mail-Adresse,email,basic,EmailAddress,EmailAddress
+Servicekontotyp,dataportServicekontoType,basic,CitizenProfileType,CitizenProfileType

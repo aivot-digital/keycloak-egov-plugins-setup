@@ -1,0 +1,31 @@
+{
+    "alias": "schleswigholstein",
+    "name": "Servicekonto Schleswig-Holstein",
+    "use_stork": true,
+    "envs": [
+        {
+            "alias": "prod",
+            "name": "Produktion",
+            "entity_id": "urn:dataport:osi:servicekonto:idp:rz2:prod:sh",
+            "metadata_descriptor_url": "https://idp.serviceportal.schleswig-holstein.de/webidp/metadata/metadata",
+            "single_sign_on_url": "https://idp.serviceportal.schleswig-holstein.de/webidp/SamlWebSso/AuthnRequestPostBinding",
+            "single_logout_url": "https://idp.serviceportal.schleswig-holstein.de/webidp/SingleLogOut/SingleLogoutServiceViaPost"
+        },
+        {
+            "alias": "staging",
+            "name": "Vorproduktion",
+            "entity_id": "urn:dataport:osi:servicekonto:idp:rz2:stage:sh",
+            "metadata_descriptor_url": "https://idp.serviceportal-stage.schleswig-holstein.de/webidp/metadata/metadata",
+            "single_sign_on_url": "https://idp.serviceportal-stage.schleswig-holstein.de/webidp/SamlWebSso/AuthnRequestPostBinding",
+            "single_logout_url": "https://idp.serviceportal-stage.schleswig-holstein.de/webidp/SingleLogOut/SingleLogoutServiceViaPost"
+        }
+    ],
+    "name_id_policy_format": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+    "principal_type": "SUBJECT",
+    "principal_attribute": null,
+    "want_assertions_encrypted": false,
+    "want_assertions_signed": true,
+    "post_binding_logout": false,
+    "allow_create": false,
+    "signature_algorithm": "RSA_SHA256"
+}
