@@ -10,6 +10,14 @@
             "metadata_descriptor_url": "https://id.bund.de/idp",
             "single_sign_on_url": "https://id.bund.de/idp/profile/SAML2/POST/SSO",
             "single_logout_url": null
+        },
+        {
+            "alias": "staging",
+            "name": "Vorproduktion",
+            "entity_id": "https://int.id.bund.de/idp",
+            "metadata_descriptor_url": "https://int.id.bund.de/idp",
+            "single_sign_on_url": "https://int.id.bund.de/idp/profile/SAML2/POST/SSO",
+            "single_logout_url": null
         }
     ],
     "name_id_policy_format": "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
