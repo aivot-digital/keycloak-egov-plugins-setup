@@ -239,7 +239,7 @@ identityProviderMappers:
   {% for attribute in idp.attributes %}
   - name: "{{ attribute.user_attribute_name }}"
     identityProviderAlias: "{{ idp.alias }}-{{ env.alias }}"
-    {% if attribute.attribute_format == 'uri' %}
+    {% if attribute.attribute_format != 'xpath' %}
     identityProviderMapper: "saml-user-attribute-idp-mapper"
     {% endif %}
     {% if attribute.attribute_format == 'xpath' %}
