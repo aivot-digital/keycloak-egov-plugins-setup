@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - keycloak
-    restart: no
+    restart: on-failure
     environment:
       KEYCLOAK_URL: "http://keycloak:8080"
       KEYCLOAK_USER: "admin"
@@ -34,6 +34,6 @@ services:
       SMTP_USERNAME: "test"
       SMTP_PASSWORD: "test"
       SMTP_FROM: "test"
-      SMTP_FROM_DISPLAY: "Gover Test"
+      SMTP_FROM_DISPLAY: "Mail Test"
       HOSTNAME: "http://localhost:8080"
       BACKEND_CLIENT_SECRET: "my-super-secret-key"
