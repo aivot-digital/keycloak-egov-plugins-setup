@@ -1,31 +1,33 @@
 {
-  "alias": "muk",
-  "name": "Mein Unternehmenskonto",
-  "use_stork": false,
-  "envs": [
-    {
-      "alias": "prod",
-      "name": "Produktion",
-      "entity_id": "https://www.elster.de",
-      "metadata_descriptor_url": "",
-      "single_sign_on_url": "https://www.elster.de/ekona/sso",
-      "single_logout_url": "https://www.elster.de/ekona/slo"
-    },
-    {
-      "alias": "staging",
-      "name": "Vorproduktion",
-      "entity_id": "https://e4k-portal.een.elster.de",
-      "metadata_descriptor_url": "",
-      "single_sign_on_url": "https://e4k-portal.een.elster.de/ekona/sso",
-      "single_logout_url": "https://e4k-portal.een.elster.de/ekona/slo"
-    }
-  ],
-  "name_id_policy_format": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
-  "principal_type": "",
-  "principal_attribute": null,
-  "want_assertions_encrypted": true,
-  "want_assertions_signed": false,
-  "post_binding_logout": true,
-  "allow_create": true,
-  "signature_algorithm": "RSA_SHA256_MGF1"
+    "alias": "muk",
+    "name": "Mein Unternehmenskonto",
+    "use_stork": false,
+    "envs": [
+        {
+            "alias": "prod",
+            "name": "Produktion",
+            "entity_id": "https://www.elster.de",
+            "metadata_descriptor_url": null,
+            "signing_certificate": "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",
+            "single_sign_on_url": "https://www.elster.de/ekona/sso",
+            "single_logout_url": "https://www.elster.de/ekona/slo"
+        },
+        {
+            "alias": "staging",
+            "name": "Vorproduktion",
+            "entity_id": "https://e4k-portal.een.elster.de",
+            "metadata_descriptor_url": null,
+            "signing_certificate": "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",
+            "single_sign_on_url": "https://e4k-portal.een.elster.de/ekona/sso",
+            "single_logout_url": "https://e4k-portal.een.elster.de/ekona/slo"
+        }
+    ],
+    "name_id_policy_format": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+    "principal_type": "Subject NameID",
+    "principal_attribute": null,
+    "want_assertions_encrypted": true,
+    "want_assertions_signed": false,
+    "post_binding_logout": true,
+    "allow_create": true,
+    "signature_algorithm": "RSA_SHA256_MGF1"
 }

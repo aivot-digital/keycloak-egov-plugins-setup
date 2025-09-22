@@ -8,6 +8,7 @@
             "name": "Produktion",
             "entity_id": "https://id.bayernportal.de/idp",
             "metadata_descriptor_url": "https://id.bayernportal.de/idp",
+            "signing_certificate": null,
             "single_sign_on_url": "https://id.bayernportal.de/idp/profile/SAML2/POST/SSO",
             "single_logout_url": null
         },
@@ -16,6 +17,7 @@
             "name": "Vorproduktion",
             "entity_id": "https://pre-id.bayernportal.de/idp",
             "metadata_descriptor_url": "https://pre-id.bayernportal.de/idp",
+            "signing_certificate": null,
             "single_sign_on_url": "https://pre-id.bayernportal.de/idp/profile/SAML2/POST/SSO",
             "single_logout_url": null
         }

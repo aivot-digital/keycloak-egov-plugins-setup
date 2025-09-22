@@ -222,8 +222,9 @@ identityProviders:
       {% if idp.want_assertions_encrypted %}encryptionAlgorithm: "RSA-OAEP"{% endif %}
       forceAuthn: "true"
       validateSignature: "true"
-      metadataDescriptorUrl: "{{ env.metadata_descriptor_url }}"
-      useMetadataDescriptorUrl: "false"
+      {% if env.signing_certificate is not none %}signingCertificate: "{{ env.signing_certificate }}"{% endif %}
+      {% if env.metadata_descriptor_url is not none %}metadataDescriptorUrl: "{{ env.metadata_descriptor_url }}"{% endif %}
+      useMetadataDescriptorUrl: "{% if env.metadata_descriptor_url is not none %}true{% else %}false{% endif %}"
       signSpMetadata: "false"
       authnContextComparisonType: "exact"
       doNotStoreUsers: "true"

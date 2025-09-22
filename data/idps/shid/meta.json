@@ -8,6 +8,7 @@
             "name": "Produktion",
             "entity_id": "urn:dataport:osi:servicekonto:idp:rz2:prod:sh",
             "metadata_descriptor_url": "https://idp.serviceportal.schleswig-holstein.de/webidp/metadata/metadata",
+            "signing_certificate": null,
             "single_sign_on_url": "https://idp.serviceportal.schleswig-holstein.de/webidp/SamlWebSso/AuthnRequestPostBinding",
             "single_logout_url": "https://idp.serviceportal.schleswig-holstein.de/webidp/SingleLogOut/SingleLogoutServiceViaPost"
         },
@@ -16,6 +17,7 @@
             "name": "Vorproduktion",
             "entity_id": "urn:dataport:osi:servicekonto:idp:rz2:stage:sh",
             "metadata_descriptor_url": "https://idp.serviceportal-stage.schleswig-holstein.de/webidp/metadata/metadata",
+            "signing_certificate": null,
             "single_sign_on_url": "https://idp.serviceportal-stage.schleswig-holstein.de/webidp/SamlWebSso/AuthnRequestPostBinding",
             "single_logout_url": "https://idp.serviceportal-stage.schleswig-holstein.de/webidp/SingleLogOut/SingleLogoutServiceViaPost"
         }
