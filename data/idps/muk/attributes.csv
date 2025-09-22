@@ -1,0 +1,28 @@
+label,user_attribute_name,attribute_format,friendly_name,attribute_name
+Firmenname,orgCompanyName,basic,Firmenname,Firmenname
+Rechtsform Code (Rechtsform),orgLegalFormCode,basic,Rechtsform,Rechtsform
+Rechtsform (RechtsformText),orgLegalFormText,basic,RechtsformText,RechtsformText
+Registerart,orgRegisterType,basic,Registerart,Registerart
+Registergericht,orgRegisterCourt,basic,Registergericht,Registergericht
+Registernummer,orgRegisterNumber,basic,Registernummer,Registernummer
+Tätigkeit Code (Taetigkeit),orgOccupationCode,basic,Taetigkeit,Taetigkeit
+Tätigkeit (TaetigkeitText),orgOccupationText,basic,TaetigkeitText,TaetigkeitText
+Unternehmensanschrift: Typ,orgAddressType,xpath,//ekona:Typ,Unternehmensanschrift
+Unternehmensanschrift: Straße,orgStreet,xpath,//ekona:Strasse,Unternehmensanschrift
+Unternehmensanschrift: Hausnummer,orgBuilding,xpath,//ekona:Hausnummer,Unternehmensanschrift
+Unternehmensanschrift: Postleitzahl,orgZipCode,xpath,//ekona:PLZ,Unternehmensanschrift
+Unternehmensanschrift: Ort,orgCity,xpath,//ekona:Ort,Unternehmensanschrift
+Unternehmensanschrift: Ortsteil,orgCityDistrict,xpath,//ekona:Ortsteil,Unternehmensanschrift
+Unternehmensanschrift: Adressergänzung,orgAddressAddition,xpath,//ekona:Adressergaenzung,Unternehmensanschrift
+Unternehmensanschrift: Land,orgCountry,xpath,//ekona:Land,Unternehmensanschrift
+Handelnde Person: Akademischer Grad,title,xpath,//ekona:AkademischerGrad,HandelndePerson
+Handelnde Person: Namensvorsatz,salutation,xpath,//ekona:Namensvorsatz,HandelndePerson
+Handelnde Person: Vorname,firstName,xpath,//ekona:Vorname,HandelndePerson
+Handelnde Person: Nachname,lastName,xpath,//ekona:Nachname,HandelndePerson
+Handelnde Person: Namenszusatz,zusatzName,xpath,//ekona:Namenszusatz,HandelndePerson
+Handelnde Person: Geburtsdatum,dateOfBirth,xpath,//ekona:Geburtsdatum,HandelndePerson
+Vertrauensniveau Identifizierung,trustLevelIdentification,basic,ElsterVertrauensniveauIdentifizierung,ElsterVertrauensniveauIdentifizierung
+Datenkranz Typ,elsterDatenkranzTyp,basic,DatenkranzTyp,DatenkranzTyp
+Vertrauensniveau Authentifizierung,trustLevelAuthentication,basic,ElsterVertrauensniveauAuthentifizierung,ElsterVertrauensniveauAuthentifizierung
+Identitätstyp (PersTyp),elsterIdentitaetstyp,basic,PersTyp,PersTyp
+Datenübermittler Pseudonym ID,elsterDatenuebermittlerPseudonymID,basic,DatenuebermittlerPseudonymId,DatenuebermittlerPseudonymId

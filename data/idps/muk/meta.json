@@ -1,0 +1,31 @@
+{
+  "alias": "muk",
+  "name": "Mein Unternehmenskonto",
+  "use_stork": false,
+  "envs": [
+    {
+      "alias": "prod",
+      "name": "Produktion",
+      "entity_id": "https://www.elster.de",
+      "metadata_descriptor_url": "",
+      "single_sign_on_url": "https://www.elster.de/ekona/sso",
+      "single_logout_url": "https://www.elster.de/ekona/slo"
+    },
+    {
+      "alias": "staging",
+      "name": "Vorproduktion",
+      "entity_id": "https://e4k-portal.een.elster.de",
+      "metadata_descriptor_url": "",
+      "single_sign_on_url": "https://e4k-portal.een.elster.de/ekona/sso",
+      "single_logout_url": "https://e4k-portal.een.elster.de/ekona/slo"
+    }
+  ],
+  "name_id_policy_format": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+  "principal_type": "",
+  "principal_attribute": null,
+  "want_assertions_encrypted": true,
+  "want_assertions_signed": false,
+  "post_binding_logout": true,
+  "allow_create": true,
+  "signature_algorithm": "RSA_SHA256_MGF1"
+}
