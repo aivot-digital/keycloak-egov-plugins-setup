@@ -217,8 +217,8 @@ identityProviders:
       wantAuthnRequestsSigned: "true"
       signatureAlgorithm: "{{ idp.signature_algorithm }}"
       xmlSigKeyInfoKeyNameTransformer: "KEY_ID"
-      wantAssertionsSigned: "{{ idp.want_assertions_signed }}"
-      wantAssertionsEncrypted: "{{ idp.want_assertions_encrypted }}"
+      wantAssertionsSigned: "{% if idp.want_assertions_signed %}true{% else %}false{% endif %}"
+      wantAssertionsEncrypted: "{% if idp.want_assertions_encrypted %}true{% else %}false{% endif %}"
       {% if idp.want_assertions_encrypted %}encryptionAlgorithm: "RSA-OAEP"{% endif %}
       forceAuthn: "true"
       validateSignature: "true"
