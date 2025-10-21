@@ -4,7 +4,7 @@
     "use_stork": true,
     "envs": [
         {
-            "alias": "prod",
+            "alias": null,
             "name": "Produktion",
             "entity_id": "urn:dataport:osi:servicekonto:idp:rz2:prod:sh",
             "metadata_descriptor_url": "https://idp.serviceportal.schleswig-holstein.de/webidp/metadata/metadata",

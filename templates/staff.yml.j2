@@ -80,6 +80,13 @@ accessCodeLifespanUserAction: 300 # 5 Minuten
 accessTokenLifespan: 300 # 5 Minuten
 accessTokenLifespanForImplicitFlow: 900 # 15 Minuten
 
+# Setze Details zur Offline Session
+offlineSessionIdleTimeout: 0 # Deaktiviert die Offline Session
+offlineSessionMaxLifespanEnabled: false # Deaktiviert die Offline Session
+offlineSessionMaxLifespan: 0 # Deaktiviert die Offline Session
+clientOfflineSessionIdleTimeout: 0 # Deaktiviert die Offline Session
+clientOfflineSessionMaxLifespan: 0 # Deaktiviert die Offline Session
+
 # Lege Rollen für den Realm an
 roles:
   realm:
@@ -113,6 +120,18 @@ roles:
       clientRole: false
       attributes: { }
 
+    # Setze eine Standard-Rolle für alle Mitarbeiter:innen Nutzer:innen
+    - name: "default-roles-staff"
+      composites:
+        realm:
+          - "uma_authorization"
+        client:
+          account:
+            - "manage-account" # Erlaube Nutzer:innen ihr Konto zu verwalten
+            - "view-profile" # Erlaube Nutzer:innen ihr Profil anzusehen
+
+
+
 # Lege die Clients für den Realm an
 clients:
   # Der Backend-Client wird von den Backend-Services verwendet, um auf Keycloak zuzugreifen.
@@ -136,6 +155,8 @@ clients:
     frontchannelLogout: false
     clientAuthenticatorType: "client-secret"
     secret: "$(env:BACKEND_CLIENT_SECRET)"
+    defaultClientScopes: [] # TODO: Setze client scopes
+    optionalClientScopes: [] # TODO: Setze client scopes
     attributes:
       standard.token.exchange.enabled: false # Setzt "Standard Token Exchange" auf False
       oidc.ciba.grant.enabled: false # Setzt "OIDC CIBA Grant" auf False
@@ -159,6 +180,7 @@ clients:
       - "roles"
       - "profile"
       - "email"
+    optionalClientScopes: [] # TODO: Setze client scopes
     publicClient: true # Setzt "Client authentication" auf False
     standardFlowEnabled: true
     implicitFlowEnabled: false
@@ -170,8 +192,10 @@ clients:
       oidc.ciba.grant.enabled: false # Setzt "OIDC CIBA Grant" auf False
       oauth2.device.authorization.grant.enabled: false # Setzt "OAuth2 Device Authorization Grant" auf False
       frontchannel.logout.session.required: true # Setzt "Frontchannel Logout Session Required" auf True
+      pkce.code.challenge.method: "S256" # Setzt "PKCE Code Challenge Method" auf S256
+      post.logout.redirect.uris: "$(env:HOSTNAME)/staff" # Setzt die Post-Logout-Redirect-URIs
 
-# Erzeuge Users für die Service-Accounts der Clients
+# Erzeuge User für die Service-Accounts der Clients
 users:
   - username: "service-account-backend"
     emailVerified: false
@@ -185,3 +209,54 @@ users:
     clientRoles: { }
     notBefore: 0
     groups: [ ]
+
+# Lege einen Passwort und OTP Authentifizierungsfluss fest
+authenticationFlows:
+  - alias: "password and otp"
+    description: "Authentifizierungsfluss mit Passwort und OTP"
+    providerId: "basic-flow"
+    topLevel: true
+    builtIn: false
+    authenticationExecutions:
+      - authenticator: "auth-cookie"
+        authenticatorFlow: false
+        requirement: "ALTERNATIVE"
+        priority: 10
+        autheticatorFlow: false
+        userSetupAllowed: false
+
+      - authenticator: "identity-provider-redirector"
+        authenticatorFlow: false
+        requirement: "ALTERNATIVE"
+        priority: 25
+        userSetupAllowed: false
+        autheticatorFlow: false
+
+      - authenticatorFlow: true
+        requirement: ALTERNATIVE
+        priority: 50
+        autheticatorFlow: true
+        flowAlias: "pw-otp-forms"
+        userSetupAllowed: false
+
+  - alias: "pw-otp-forms"
+    description: "Authentifizierungsfluss mit Passwort und OTP"
+    providerId: "basic-flow"
+    topLevel: false
+    builtIn: false
+    authenticationExecutions:
+      - authenticator: "auth-username-password-form"
+        authenticatorFlow: false
+        requirement: "REQUIRED"
+        priority: 10
+        autheticatorFlow: false
+        userSetupAllowed: false
+      - authenticator: "auth-otp-form"
+        authenticatorFlow: false
+        requirement: "REQUIRED"
+        priority: 20
+        autheticatorFlow: false
+        userSetupAllowed: true
+
+# Setze den Browser-Authentifizierungsfluss auf den neuen Passwort und OTP Authentifizierungsfluss
+browserFlow: "password and otp"

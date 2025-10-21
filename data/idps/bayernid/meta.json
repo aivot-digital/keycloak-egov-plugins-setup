@@ -4,7 +4,7 @@
     "use_stork": true,
     "envs": [
         {
-            "alias": "prod",
+            "alias": null,
             "name": "Produktion",
             "entity_id": "https://id.bayernportal.de/idp",
             "metadata_descriptor_url": "https://id.bayernportal.de/idp",

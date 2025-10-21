@@ -4,7 +4,7 @@
     "use_stork": false,
     "envs": [
         {
-            "alias": "prod",
+            "alias": null,
             "name": "Produktion",
             "entity_id": "https://www.elster.de",
             "metadata_descriptor_url": null,
