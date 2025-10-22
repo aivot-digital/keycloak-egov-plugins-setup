@@ -197,7 +197,7 @@ clients:
       oauth2.device.authorization.grant.enabled: false # Setzt "OAuth2 Device Authorization Grant" auf False
       frontchannel.logout.session.required: true # Setzt "Frontchannel Logout Session Required" auf True
       pkce.code.challenge.method: "S256" # Setzt "PKCE Code Challenge Method" auf S256
-      post.logout.redirect.uris: "$(env:HOSTNAME)/staff" # Setzt die Post-Logout-Redirect-URIs
+      post.logout.redirect.uris: "$(env:HOSTNAME)/staff/*" # Setzt die Post-Logout-Redirect-URIs
 
 # Erzeuge User für die Service-Accounts der Clients
 users:
