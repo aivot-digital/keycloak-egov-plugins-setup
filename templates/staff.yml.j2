@@ -209,7 +209,9 @@ users:
     requiredActions: [ ]
     realmRoles:
       - "default-roles-staff"
-    clientRoles: { }
+    clientRoles:
+      "realm-management":
+        - "view-users"
     notBefore: 0
     groups: [ ]
 
