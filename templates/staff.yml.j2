@@ -169,7 +169,7 @@ clients:
   # Er besitzt Login-Möglichkeiten und ist für den Authorization Code Flow konfiguriert.
   - enabled: true
     protocol: "openid-connect"
-    clientId: app
+    clientId: "app"
     name: "App Zugriff"
     description: "Zugriff für App-Nutzer:innen"
     alwaysDisplayInConsole: false
@@ -180,6 +180,7 @@ clients:
     webOrigins:
       - "$(env:HOSTNAME)/staff/*"
     defaultClientScopes:
+      - "basic"
       - "roles"
       - "profile"
       - "email"
