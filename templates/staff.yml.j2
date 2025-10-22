@@ -87,6 +87,9 @@ offlineSessionMaxLifespan: 0 # Deaktiviert die Offline Session
 clientOfflineSessionIdleTimeout: 0 # Deaktiviert die Offline Session
 clientOfflineSessionMaxLifespan: 0 # Deaktiviert die Offline Session
 
+# Set the password policy
+passwordPolicy: "length(8) and upperCase(1) and lowerCase(1) and digits(1) and specialChars(1)"
+
 # Lege Rollen für den Realm an
 roles:
   realm:
