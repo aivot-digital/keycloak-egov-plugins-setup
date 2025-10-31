@@ -92,6 +92,13 @@ passwordPolicy: "length(8) and upperCase(1) and lowerCase(1) and digits(1) and s
 
 # Lege Rollen für den Realm an
 roles:
+  client:
+    account:
+      - name: "view-profile"
+        description: "Erlaube Nutzer:innen ihr Profil anzusehen"
+        composite: false
+        clientRole: true
+        attributes: { }
   realm:
     # Die Admin-Rolle wird benötigt um in Gover als Administrator:in zu agieren.
     # Sie sollte alle notwendigen Rechte besitzen um Nutzer:innen, Clients, Rollen und Identity Provider zu verwalten.
