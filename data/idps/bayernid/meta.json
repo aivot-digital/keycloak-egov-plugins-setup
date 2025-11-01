@@ -13,7 +13,7 @@
             "single_logout_url": null
         },
         {
-            "alias": "staging",
+            "alias": "stage",
             "name": "Vorproduktion",
             "entity_id": "https://pre-id.bayernportal.de/idp",
             "metadata_descriptor_url": "https://pre-id.bayernportal.de/idp",
