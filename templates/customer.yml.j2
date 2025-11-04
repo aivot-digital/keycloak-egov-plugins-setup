@@ -176,9 +176,9 @@ clients:
     rootUrl: "$(env:HOSTNAME)"
     baseUrl: "$(env:HOSTNAME)"
     redirectUris:
-      - "$(env:HOSTNAME)/api/public/identity/*/start/"
+      - "$(env:HOSTNAME)/api/public/identity/*"
     webOrigins:
-      - "$(env:HOSTNAME)/api/public/identity/*/callback"
+      - "$(env:HOSTNAME)/api/public/identity/*"
     defaultClientScopes:
       - "basic"
       - "profile"
@@ -202,7 +202,7 @@ clients:
       oauth2.device.authorization.grant.enabled: false # Setzt "OAuth2 Device Authorization Grant" auf False
       frontchannel.logout.session.required: true # Setzt "Frontchannel Logout Session Required" auf True
       pkce.code.challenge.method: "S256" # Setzt "PKCE Code Challenge Method" auf S256
-      post.logout.redirect.uris: "$(env:HOSTNAME)/api/public/identity/*/callback" # Setzt die Post-Logout-Redirect-URIs
+      post.logout.redirect.uris: "$(env:HOSTNAME)/api/public/identity/*" # Setzt die Post-Logout-Redirect-URIs
   # Deaktiviere den Account-Client, da dieser nicht verwendet wird.
   - clientId: "account"
     enabled: false
