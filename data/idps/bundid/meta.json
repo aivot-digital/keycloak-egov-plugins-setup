@@ -26,7 +26,7 @@
     "principal_type": "ATTRIBUTE",
     "principal_attribute": "urn:oid:1.3.6.1.4.1.25484.494450.3",
     "want_assertions_encrypted": true,
-    "want_assertions_signed": false,
+    "want_assertions_signed": true,
     "post_binding_logout": false,
     "allow_create": false,
     "signature_algorithm": "RSA_SHA256_MGF1"
