@@ -213,6 +213,15 @@ clients:
   - clientId: "security-admin-console"
     enabled: false
 
+# Limitiere die standardmäßig zugewiesenen Client-Scopes
+defaultDefaultClientScopes:
+  - "profile"
+  - "email"
+  - "basic"
+
+# Deaktiviere alle optionalen Client-Scopes standardmäßig
+defaultOptionalClientScopes: []
+
 identityProviders:
   {% for idp in idps %}
   {% for env in idp.envs %}

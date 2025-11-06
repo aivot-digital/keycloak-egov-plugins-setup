@@ -140,8 +140,6 @@ roles:
             - "manage-account" # Erlaube Nutzer:innen ihr Konto zu verwalten
             - "view-profile" # Erlaube Nutzer:innen ihr Profil anzusehen
 
-
-
 # Lege die Clients für den Realm an
 clients:
   # Der Backend-Client wird von den Backend-Services verwendet, um auf Keycloak zuzugreifen.
@@ -205,6 +203,15 @@ clients:
       frontchannel.logout.session.required: true # Setzt "Frontchannel Logout Session Required" auf True
       pkce.code.challenge.method: "S256" # Setzt "PKCE Code Challenge Method" auf S256
       post.logout.redirect.uris: "$(env:HOSTNAME)/staff/*" # Setzt die Post-Logout-Redirect-URIs
+
+# Limitiere die standardmäßig zugewiesenen Client-Scopes
+defaultDefaultClientScopes:
+  - "profile"
+  - "email"
+  - "basic"
+
+# Deaktiviere alle optionalen Client-Scopes standardmäßig
+defaultOptionalClientScopes: []
 
 # Erzeuge User für die Service-Accounts der Clients
 users:
