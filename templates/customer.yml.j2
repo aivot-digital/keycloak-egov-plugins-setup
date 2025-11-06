@@ -241,6 +241,7 @@ identityProviders:
       principalAttribute: "{{ idp.principal_attribute }}"
       allowCreate: "{{ idp.allow_create }}"
       entityId: "$(env:HOSTNAME)/idp/realms/customer"
+      attributeConsumingServiceName: "Gover"
       postBindingResponse: "true"
       artifactBindingResponse: "false"
       postBindingAuthnRequest: "true"
