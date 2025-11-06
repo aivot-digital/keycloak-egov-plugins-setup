@@ -240,6 +240,7 @@ identityProviders:
       principalType: "{{ idp.principal_type }}"
       principalAttribute: "{{ idp.principal_attribute }}"
       allowCreate: "{{ idp.allow_create }}"
+      entityId: "$(env:HOSTNAME)/idp/realms/customer"
       postBindingResponse: "true"
       artifactBindingResponse: "false"
       postBindingAuthnRequest: "true"
