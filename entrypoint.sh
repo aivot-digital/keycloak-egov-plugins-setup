@@ -2,6 +2,17 @@
 
 kc=/app/keycloak-config-cli.jar
 
+# Download password list
+pwurl=https://raw.githubusercontent.com/danielmiessler/SecLists/refs/heads/master/Passwords/Common-Credentials/Language-Specific/German_common-password-list-top-1000000.txt
+echo "Downloading password blacklist from ${pwurl}..."
+curl ${pwurl} \
+  -o /password-blacklists/100k_passwords.txt
+
+if [ $? -ne 0 ]; then
+    echo "Failed to download password blacklist"
+    exit 1
+fi
+
 # Try to apply the bootstrap master realm configuration to create the deployment client
 echo "Applying bootstrap master realm configuration..."
 java -jar ${kc} \
@@ -49,17 +60,6 @@ java -jar ${kc} \
 
 if [ $? -ne 0 ]; then
     echo "Failed to apply customer realm configuration"
-    exit 1
-fi
-
-# Download password list
-pwurl=https://raw.githubusercontent.com/danielmiessler/SecLists/refs/heads/master/Passwords/Common-Credentials/Language-Specific/German_common-password-list-top-1000000.txt
-echo "Downloading password blacklist from ${pwurl}..."
-curl ${pwurl} \
-  -o /password-blacklists/100k_passwords.txt
-
-if [ $? -ne 0 ]; then
-    echo "Failed to download password blacklist"
     exit 1
 fi
 
