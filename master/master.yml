@@ -1,17 +1,10 @@
-# Der Name und die Anzeigeinformation des Realms
-realm: "staff"
-displayName: "Gover Mitarbeiter:innen"
-displayNameHtml: "<div class=\"kc-logo-text\"><span>Gover Mitarbeiter:innen</span></div>"
+# Konfiguriere den Master Realm mit dem korrekten Setup für den Produktionseinsatz
+realm: "master"
+displayName: "Gover Administration"
+displayNameHtml: "<div class=\"kc-logo-text\"><span>Gover Administration</span></div>"
 
 # Aktiviere den Realm
 enabled: true
-
-# Verbiete die Selbstverwaltung von Nutzer:innen
-userManagedAccessAllowed: false
-# Verbiete die Nutzung von Organisationen
-organizationsEnabled: false
-# Verbiete die Nutzung von Keycloak-Administrator-Rechten durch Nutzer:innen
-adminPermissionsEnabled: false
 
 # Verbiete die Registrierung neuer Nutzer:innen sodass nur Administrator:innen Nutzer:innen anlegen können
 registrationAllowed: false
@@ -20,8 +13,8 @@ resetPasswordAllowed: false
 # Verbiete die Option "Remember Me" im Login-Formular
 rememberMe: false
 
-# Erlaube Logins ausschließlich per E-Mail-Adresse
-registrationEmailAsUsername: true
+# Erlaube Logins per Username und E-Mail-Adresse
+registrationEmailAsUsername: false
 loginWithEmailAllowed: true
 verifyEmail: true
 duplicateEmailsAllowed: false
@@ -102,146 +95,29 @@ adminEventsDetailsEnabled: false
 attributes:
   adminEventsExpiration: "31536000"
 
-# Lege Rollen für den Realm an
-roles:
-  client:
-    account:
-      - name: "view-profile"
-        description: "Erlaube Nutzer:innen ihr Profil anzusehen"
-        composite: false
-        clientRole: true
-        attributes: { }
-  realm:
-    # Die Admin-Rolle wird benötigt um in Gover als Administrator:in zu agieren.
-    # Sie sollte alle notwendigen Rechte besitzen um Nutzer:innen, Clients, Rollen und Identity Provider zu verwalten.
-    - name: "admin"
-      description: "Administrator:in mit Vollzugriff"
-      composite: true
-      composites:
-        client:
-          realm-management:
-            - "query-users"
-            - "manage-events"
-            - "query-clients"
-            - "view-realm"
-            - "manage-identity-providers"
-            - "view-clients"
-            - "impersonation"
-            - "create-client"
-            - "manage-realm"
-            - "manage-users"
-            - "realm-admin"
-            - "view-identity-providers"
-            - "view-users"
-            - "query-groups"
-            - "manage-authorization"
-            - "view-authorization"
-            - "view-events"
-            - "manage-clients"
-            - "query-realms"
-      clientRole: false
-      attributes: { }
-
-    # Setze eine Standard-Rolle für alle Mitarbeiter:innen Nutzer:innen
-    - name: "default-roles-staff"
-      composites:
-        realm:
-          - "uma_authorization"
-        client:
-          account:
-            - "manage-account" # Erlaube Nutzer:innen ihr Konto zu verwalten
-            - "view-profile" # Erlaube Nutzer:innen ihr Profil anzusehen
-
-# Lege die Clients für den Realm an
-clients:
-  # Der Backend-Client wird von den Backend-Services verwendet, um auf Keycloak zuzugreifen.
-  # Er besitzt keine Login-Möglichkeiten und ist ausschließlich für die Client-Credentials Authentifizierung konfiguriert.
-  - enabled: true
-    protocol: "openid-connect"
-    clientId: "backend"
-    name: "Backend Zugriff"
-    description: "Zugriff für Backend-Services"
-    alwaysDisplayInConsole: false
-    rootUrl: "$(env:HOSTNAME)"
-    redirectUris:
-      - "*"
-    webOrigins:
-      - "*"
-    publicClient: false # Setzt "Client authentication" auf True
-    standardFlowEnabled: false
-    implicitFlowEnabled: false
-    directAccessGrantsEnabled: false
-    serviceAccountsEnabled: true
-    frontchannelLogout: false
-    clientAuthenticatorType: "client-secret"
-    secret: "$(env:BACKEND_CLIENT_SECRET)"
-    defaultClientScopes: []  # Setze keine standardmäßigen Scopes
-    optionalClientScopes: []  # Setze keine optionalen Scopes
-    attributes:
-      standard.token.exchange.enabled: false # Setzt "Standard Token Exchange" auf False
-      oidc.ciba.grant.enabled: false # Setzt "OIDC CIBA Grant" auf False
-      oauth2.device.authorization.grant.enabled: false # Setzt "OAuth2 Device Authorization Grant" auf False
-      pkce.code.challenge.method: "S256" # Setzt "PKCE Code Challenge Method" auf S256
-
-  # Der App-Client wird von der Gover Mitarbeiter:innen App verwendet, um Nutzer:innen zu authentifizieren.
-  # Er besitzt Login-Möglichkeiten und ist für den Authorization Code Flow konfiguriert.
-  - enabled: true
-    protocol: "openid-connect"
-    clientId: "app"
-    name: "App Zugriff"
-    description: "Zugriff für App-Nutzer:innen"
-    alwaysDisplayInConsole: false
-    rootUrl: "$(env:HOSTNAME)/staff"
-    baseUrl: "$(env:HOSTNAME)/staff"
-    redirectUris:
-      - "$(env:HOSTNAME)/staff/*"
-    webOrigins:
-      - "$(env:HOSTNAME)/staff/*"
-    defaultClientScopes:
-      - "basic"
-      - "roles"
-      - "profile"
-      - "email"
-    optionalClientScopes: [] # Setze keine optionalen Scopes
-    publicClient: true # Setzt "Client authentication" auf False
-    standardFlowEnabled: true
-    implicitFlowEnabled: false
-    directAccessGrantsEnabled: false
-    serviceAccountsEnabled: false
-    frontchannelLogout: true
-    attributes:
-      standard.token.exchange.enabled: false # Setzt "Standard Token Exchange" auf False
-      oidc.ciba.grant.enabled: false # Setzt "OIDC CIBA Grant" auf False
-      oauth2.device.authorization.grant.enabled: false # Setzt "OAuth2 Device Authorization Grant" auf False
-      frontchannel.logout.session.required: true # Setzt "Frontchannel Logout Session Required" auf True
-      pkce.code.challenge.method: "S256" # Setzt "PKCE Code Challenge Method" auf S256
-      post.logout.redirect.uris: "$(env:HOSTNAME)/staff/*" # Setzt die Post-Logout-Redirect-URIs
-
-# Limitiere die standardmäßig zugewiesenen Client-Scopes
-defaultDefaultClientScopes:
-  - "profile"
-  - "email"
-  - "basic"
-
-# Deaktiviere alle optionalen Client-Scopes standardmäßig
-defaultOptionalClientScopes: []
-
-# Erzeuge User für die Service-Accounts der Clients
 users:
-  - username: "service-account-backend"
-    emailVerified: false
+  # Deaktiviere den Standard-Admin Benutzer
+  - username: "admin"
+    enabled: false
+
+  # Erzeuge einen neuen Admin Benutzer mit den in den Umgebungsvariablen definierten Zugangsdaten
+  - username: "$(env:KEYCLOAK_ADMIN_USERNAME)"
+    email: "$(env:KEYCLOAK_ADMIN_EMAIL)"
+    emailVerified: false # E-Mail Verifizierung deaktivieren
     enabled: true
     totp: false
-    serviceAccountClientId: "backend"
     disableableCredentialTypes: [ ]
     requiredActions: [ ]
     realmRoles:
-      - "default-roles-staff"
-    clientRoles:
-      "realm-management":
-        - "view-users"
+      - "default-roles-master"
+      - "admin"
+    clientRoles: { }
     notBefore: 0
     groups: [ ]
+    credentials:
+      - type: "password"
+        value: "$(env:KEYCLOAK_ADMIN_PASSWORD)"
+        temporary: true
 
 # Lege einen Passwort und OTP Authentifizierungsfluss fest
 authenticationFlows:
@@ -347,3 +223,4 @@ authenticationFlows:
 
 # Setze den Browser-Authentifizierungsfluss auf den neuen Passwort und OTP Authentifizierungsfluss
 browserFlow: "password and otp"
+

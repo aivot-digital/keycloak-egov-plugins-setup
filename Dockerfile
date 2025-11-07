@@ -31,9 +31,32 @@ LABEL org.opencontainers.image.vendor="Aivot"
 LABEL org.opencontainers.image.title="Keycloak eGov Plugins Setup"
 LABEL org.opencontainers.image.description="Configuration of Keycloak with eGov plugins"
 
-# Configure Keycloak Config CLI to import the generated files
-ENV IMPORT_FILES_LOCATIONS=/configs/*
+# Configure Keycloak Config CLI to use environment variable substitution
 ENV IMPORT_VARSUBSTITUTION_ENABLED=true
 
 # Copy the generated configuration files from the builder stage
 COPY --from=builder /app/.generated /configs
+
+# Copy master realm specific configuration files
+COPY ./master/bootstrap-master.yml /configs/bootstrap-master.yml
+COPY ./master/master.yml /configs/master.yml
+
+# Copy entrypoint script
+COPY ./entrypoint.sh /opt/keycloak-config-cli/entrypoint.sh
+
+# Switch to root user to set permissions
+USER 0
+
+# Make entrypoint executable
+RUN chmod +x /opt/keycloak-config-cli/entrypoint.sh
+
+# Create and own password blacklists directory
+RUN mkdir "/password-blacklists/" && \
+    chown -R 65534:65534 /password-blacklists/ && \
+    chmod 755 /password-blacklists/
+
+# Switch back to non-root user
+USER nobody
+
+# Set the entrypoint to the custom script
+ENTRYPOINT ["/opt/keycloak-config-cli/entrypoint.sh"]

@@ -1,0 +1,44 @@
+# Konfiguriere den Master Realm mit dem Basis Setup für ein späteres, automatisiertes Deployment
+realm: "master"
+
+# Erzeuge einen Client für den Deployment-Service
+clients:
+  - enabled: true
+    protocol: "openid-connect"
+    clientId: "deployment"
+    name: "Deployment Zugriff"
+    description: "Zugriff für den Deployment-Service"
+    alwaysDisplayInConsole: false
+    rootUrl: ""
+    redirectUris: [ ]
+    webOrigins: [ ]
+    publicClient: false # Setzt "Client authentication" auf True
+    standardFlowEnabled: false
+    implicitFlowEnabled: false
+    directAccessGrantsEnabled: false
+    serviceAccountsEnabled: true
+    frontchannelLogout: false
+    clientAuthenticatorType: "client-secret"
+    secret: "$(env:KEYCLOAK_DEPLOYMENT_CLIENT_SECRET)"
+    defaultClientScopes: [ ]
+    optionalClientScopes: [ ]
+    attributes:
+      standard.token.exchange.enabled: false # Setzt "Standard Token Exchange" auf False
+      oidc.ciba.grant.enabled: false # Setzt "OIDC CIBA Grant" auf False
+      oauth2.device.authorization.grant.enabled: false # Setzt "OAuth2 Device Authorization Grant" auf False
+
+# Konfiguriere den Service-Account Benutzer für den Deployment-Service
+users:
+  - username: "service-account-deployment"
+    emailVerified: false
+    enabled: true
+    totp: false
+    serviceAccountClientId: "deployment"
+    disableableCredentialTypes: [ ]
+    requiredActions: [ ]
+    realmRoles:
+      - "default-roles-master"
+      - "admin"
+    clientRoles: { }
+    notBefore: 0
+    groups: [ ]

@@ -85,6 +85,18 @@ offlineSessionMaxLifespan: 0 # Deaktiviert die Offline Session
 clientOfflineSessionIdleTimeout: 0 # Deaktiviert die Offline Session
 clientOfflineSessionMaxLifespan: 0 # Deaktiviert die Offline Session
 
+# Aktiviere das User-Event-Logging für den Realm und setze die Aufbewahrungsdauer
+eventsEnabled: true
+eventsExpiration: 31536000
+eventsListeners:
+  - "jboss-logging"
+
+# Aktiviere das Admin-Event-Logging für den Realm und setze die Aufbewahrungsdauer
+adminEventsEnabled: true
+adminEventsDetailsEnabled: false
+attributes:
+  adminEventsExpiration: "31536000"
+
 # Setze die KeyProvider auf RSA 4096 für die Nutzerkontenanbindung
 components:
   "org.keycloak.keys.KeyProvider":
