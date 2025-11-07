@@ -23,6 +23,7 @@ services:
     restart: on-failure
     environment:
       KEYCLOAK_URL: "http://keycloak:8080"
+      HOSTNAME: "http://localhost:8080"
 
       KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME: "admin"
       KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD: "admin"
@@ -30,9 +31,9 @@ services:
       KEYCLOAK_DEPLOYMENT_CLIENT_NAME: "deployment"
       KEYCLOAK_DEPLOYMENT_CLIENT_SECRET: "my-super-secret-key"
 
-      KEYCLOAK_ADMIN_EMAIL: "mail@aivot.de"
-      KEYCLOAK_ADMIN_USERNAME: "master_admin"
-      KEYCLOAK_ADMIN_PASSWORD: "awdawed!12312f1wecEb1ce9b1w9pxv1xw9p1wx9vzy1b9u1" # Darf kein $-Zeichen enthalten
+      KEYCLOAK_ADMIN_EMAIL: "test@example.com"
+      KEYCLOAK_ADMIN_USERNAME: "superuser"
+      KEYCLOAK_ADMIN_PASSWORD: "My-Super-Secret-Password-No.1" # Darf kein $-Zeichen enthalten
 
       KEYCLOAK_AVAILABILITYCHECK_ENABLED: true
       KEYCLOAK_AVAILABILITYCHECK_TIMEOUT: "120s"
@@ -40,11 +41,11 @@ services:
 
       SMTP_HOST: "smtp.example.com"
       SMTP_PORT: "587"
-      SMTP_USERNAME: "test"
-      SMTP_PASSWORD: "test"
-      SMTP_FROM: "test"
+      SMTP_USERNAME: "username"
+      SMTP_PASSWORD: "my-super-secret-password"
+      SMTP_FROM: "test@example.com"
       SMTP_FROM_DISPLAY: "Mail Test"
-      HOSTNAME: "http://localhost:8080"
+
       BACKEND_CLIENT_SECRET: "my-super-secret-key"
     volumes:
       - password_blacklists:/password-blacklists
