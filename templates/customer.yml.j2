@@ -234,6 +234,22 @@ defaultDefaultClientScopes:
 # Deaktiviere alle optionalen Client-Scopes standardmäßig
 defaultOptionalClientScopes: []
 
+# Erzeuge einen Authentifizierungsfluss für die Identity Provider
+authenticationFlows:
+  - alias: "first broker login servicekonto"
+    description: "Authentifizierungsfluss mit einem Identity Provider für Servicekonten"
+    providerId: "basic-flow"
+    topLevel: true
+    builtIn: false
+    authenticationExecutions:
+      - authenticator: "idp-create-user-if-unique"
+        authenticatorFlow: false
+        requirement: "REQUIRED"
+        priority: 0
+        autheticatorFlow: false
+        userSetupAllowed: false
+
+# Lege die Identity Provider für den Realm an
 identityProviders:
   {% for idp in idps %}
   {% for env in idp.envs %}
