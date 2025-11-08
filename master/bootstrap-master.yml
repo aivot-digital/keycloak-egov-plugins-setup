@@ -5,7 +5,7 @@ realm: "master"
 clients:
   - enabled: true
     protocol: "openid-connect"
-    clientId: "deployment"
+    clientId: "$(env:KEYCLOAK_DEPLOYMENT_CLIENT_NAME)"
     name: "Deployment Zugriff"
     description: "Zugriff für den Deployment-Service"
     alwaysDisplayInConsole: false
@@ -29,11 +29,11 @@ clients:
 
 # Konfiguriere den Service-Account Benutzer für den Deployment-Service
 users:
-  - username: "service-account-deployment"
+  - username: "service-account-$(env:KEYCLOAK_DEPLOYMENT_CLIENT_NAME)"
     emailVerified: false
     enabled: true
     totp: false
-    serviceAccountClientId: "deployment"
+    serviceAccountClientId: "$(env:KEYCLOAK_DEPLOYMENT_CLIENT_NAME)"
     disableableCredentialTypes: [ ]
     requiredActions: [ ]
     realmRoles:

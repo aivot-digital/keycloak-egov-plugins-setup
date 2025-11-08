@@ -97,7 +97,7 @@ attributes:
 
 users:
   # Deaktiviere den Standard-Admin Benutzer
-  - username: "admin"
+  - username: "$(env:KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME)"
     enabled: false
 
   # Erzeuge einen neuen Admin Benutzer mit den in den Umgebungsvariablen definierten Zugangsdaten
