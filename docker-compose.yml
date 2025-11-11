@@ -1,6 +1,6 @@
 services:
   keycloak:
-    image: ghcr.io/aivot-digital/keycloak-egov-plugins:26.4.2.0
+    image: ghcr.io/aivot-digital/keycloak-egov-plugins:26.4.4.0
     restart: always
     command: [ 'start-dev' ]
     environment:
@@ -11,13 +11,11 @@ services:
       KC_HOSTNAME: http://localhost:8080
       KC_HOSTNAME_BACKCHANNEL_DYNAMIC: false
       KC_FEATURES: transient-users,update-email,hostname:v2
-    volumes:
-      - password_blacklists:/opt/keycloak/data/password-blacklists/
     ports:
       - "8080:8080"
 
   keycloak-setup:
-    image: ghcr.io/aivot-digital/keycloak-egov-plugins-setup:0.0.9
+    image: ghcr.io/aivot-digital/keycloak-egov-plugins-setup:0.0.12
     depends_on:
       - keycloak
     restart: on-failure
@@ -47,8 +45,3 @@ services:
       SMTP_FROM_DISPLAY: "Mail Test"
 
       BACKEND_CLIENT_SECRET: "my-super-secret-key"
-    volumes:
-      - password_blacklists:/password-blacklists
-
-volumes:
-  password_blacklists:
