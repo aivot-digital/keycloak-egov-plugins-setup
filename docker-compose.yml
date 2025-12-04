@@ -1,6 +1,6 @@
 services:
   keycloak:
-    image: ghcr.io/aivot-digital/keycloak-egov-plugins:26.4.4.0
+    image: ghcr.io/aivot-digital/keycloak-egov-plugins:26.4.7.0
     restart: always
     command: [ 'start-dev' ]
     environment:
