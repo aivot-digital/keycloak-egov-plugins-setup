@@ -6,10 +6,10 @@ services:
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
-      KC_HTTP_ENABLED: true
+      KC_HTTP_ENABLED: "true"
       KC_HTTP_PORT: 8080
       KC_HOSTNAME: http://localhost:8080
-      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: false
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "false"
       KC_FEATURES: transient-users,update-email,hostname:v2
     ports:
       - "8080:8080"
@@ -18,9 +18,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: "development"
     depends_on:
       - keycloak
-    restart: no
+    restart: "no"
     environment:
       KEYCLOAK_URL: "http://keycloak:8080"
       HOSTNAME: "http://localhost:8080"
@@ -35,7 +37,7 @@ services:
       KEYCLOAK_ADMIN_USERNAME: "superuser"
       KEYCLOAK_ADMIN_PASSWORD: "My-Super-Secret-Password-No.1" # Darf kein $-Zeichen enthalten
 
-      KEYCLOAK_AVAILABILITYCHECK_ENABLED: true
+      KEYCLOAK_AVAILABILITYCHECK_ENABLED: "true"
       KEYCLOAK_AVAILABILITYCHECK_TIMEOUT: "120s"
       LOGGING_LEVEL_HTTP: "DEBUG"
 

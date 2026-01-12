@@ -1,5 +1,8 @@
 FROM python:3.13.7-alpine3.22 AS builder
 
+# Set environment to production
+ARG ENVIRONMENT=production
+
 RUN mkdir /app
 
 WORKDIR /app
@@ -7,9 +10,9 @@ WORKDIR /app
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 
-COPY ./data /app/data
-COPY ./templates /app/templates
+COPY ./realms /app/realms
 COPY ./build.py /app/build.py
+COPY ./utils.py /app/utils.py
 
 RUN python build.py
 
@@ -39,7 +42,6 @@ COPY --from=builder /app/.generated /configs
 
 # Copy master realm specific configuration files
 COPY ./master/bootstrap-master.yml /configs/bootstrap-master.yml
-COPY ./master/master.yml /configs/master.yml
 
 # Copy entrypoint script
 COPY ./entrypoint.sh /opt/keycloak-config-cli/entrypoint.sh

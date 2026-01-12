@@ -119,108 +119,43 @@ users:
         value: "$(env:KEYCLOAK_ADMIN_PASSWORD)"
         temporary: true
 
-# Lege einen Passwort und OTP Authentifizierungsfluss fest
+# Lege die Authentifizierungsflüsse für den Realm fest
 authenticationFlows:
-  - alias: "password and otp"
-    description: "Authentifizierungsfluss mit Passwort und OTP"
+  {% for flow in flows %}
+  - alias: "{{ flow.alias }}"
+    description: "{{ flow.description }}"
     providerId: "basic-flow"
-    topLevel: true
+    topLevel: {% if flow.topLevel %}true{% else %}false{% endif %}
     builtIn: false
     authenticationExecutions:
-      - authenticator: "auth-cookie"
-        authenticatorFlow: false
-        requirement: "ALTERNATIVE"
-        priority: 10
-        autheticatorFlow: false
+      {% for exec in flow.authenticationExecutions %}
+      - authenticatorFlow: {% if 'flowAlias' in exec %}true{% else %}false{% endif %}
+        {% if 'aliasFlow' not in exec %}authenticator: {{ exec.authenticator }}{% endif %}
+        {% if 'authenticatorConfig' in exec %}authenticatorConfig: {{ exec.authenticatorConfig.alias }}{% endif %}
+        requirement: "{{ exec.requirement }}"
+        priority: {{ exec.priority }}
+        autheticatorFlow: {% if 'flowAlias' in exec %}true{% else %}false{% endif %}
+        {% if 'flowAlias' in exec %}flowAlias: "{{ exec.flowAlias }}"{% endif %}
         userSetupAllowed: false
-      - authenticator: "identity-provider-redirector"
-        authenticatorFlow: false
-        requirement: "ALTERNATIVE"
-        priority: 25
-        userSetupAllowed: false
-        autheticatorFlow: false
-      - authenticatorFlow: true
-        requirement: ALTERNATIVE
-        priority: 50
-        autheticatorFlow: true
-        flowAlias: "pw-otp-forms"
-        userSetupAllowed: false
+      {% endfor %}
+  {% endfor %}
 
-  - alias: "pw-otp-forms"
-    description: "Authentifizierungsfluss mit Passwort und OTP"
-    providerId: "basic-flow"
-    topLevel: false
-    builtIn: false
-    authenticationExecutions:
-      - authenticator: "auth-username-password-form"
-        authenticatorFlow: false
-        requirement: "REQUIRED"
-        priority: 10
-        autheticatorFlow: false
-        userSetupAllowed: false
-      - authenticator: "auth-otp-form"
-        authenticatorFlow: false
-        requirement: "REQUIRED"
-        priority: 20
-        autheticatorFlow: false
-        userSetupAllowed: true
-      - authenticator: "auth-recovery-authn-code-form"
-        authenticatorFlow: false
-        requirement: "ALTERNATIVE"
-        priority: 30
-        autheticatorFlow: false
-        userSetupAllowed: false
-
-  - alias: "password and passkey"
-    description: "Authentifizierungsfluss mit Passwort und PassKey"
-    providerId: "basic-flow"
-    topLevel: true
-    builtIn: false
-    authenticationExecutions:
-      - authenticator: "auth-cookie"
-        authenticatorFlow: false
-        requirement: "ALTERNATIVE"
-        priority: 10
-        autheticatorFlow: false
-        userSetupAllowed: false
-      - authenticator: "identity-provider-redirector"
-        authenticatorFlow: false
-        requirement: "ALTERNATIVE"
-        priority: 25
-        userSetupAllowed: false
-        autheticatorFlow: false
-      - authenticatorFlow: true
-        requirement: ALTERNATIVE
-        priority: 50
-        autheticatorFlow: true
-        flowAlias: "pw-pk-forms"
-        userSetupAllowed: false
-
-  - alias: "pw-pk-forms"
-    description: "Authentifizierungsfluss mit Passwort und PassKey"
-    providerId: "basic-flow"
-    topLevel: false
-    builtIn: false
-    authenticationExecutions:
-      - authenticator: "auth-username-password-form"
-        authenticatorFlow: false
-        requirement: "REQUIRED"
-        priority: 10
-        autheticatorFlow: false
-        userSetupAllowed: false
-      - authenticator: "webauthn-authenticator"
-        authenticatorFlow: false
-        requirement: "REQUIRED"
-        priority: 20
-        autheticatorFlow: false
-        userSetupAllowed: true
-      - authenticator: "auth-recovery-authn-code-form"
-        authenticatorFlow: false
-        requirement: "ALTERNATIVE"
-        priority: 30
-        autheticatorFlow: false
-        userSetupAllowed: false
-
-# Setze den Browser-Authentifizierungsfluss auf den neuen Passwort und OTP Authentifizierungsfluss
+{% if is_prod %}
+# Setze den Browser-Authentifizierungsfluss im Produktionsmodus auf den neuen Passwort und OTP Authentifizierungsfluss
 browserFlow: "password and otp"
+{% else %}
+# Im Entwicklungsmodus wird der Standard-Authentifizierungsfluss verwendet, um das Testen zu erleichtern.
+browserFlow: "browser"
+{% endif %}
 
+# Erlaube Passkeys als Authentifizierungsmethode (wird von Keycloak Config CLI v.6.4.0-26.1.0 nicht unterstützt)
+# webAuthnPolicyPasswordlessPasskeysEnabled: true
+
+{% if additional_authenticator_configs is defined and additional_authenticator_configs|length > 0 %}
+authenticatorConfig:
+    {% for config in additional_authenticator_configs %}
+  - alias: "{{ config.alias }}"
+    config:
+      credentials: "{{ config.credentials }}"
+    {% endfor %}
+{% endif %}
