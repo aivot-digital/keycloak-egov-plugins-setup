@@ -267,7 +267,7 @@ authenticationFlows:
 
 {% if is_prod %}
 # Setze den Browser-Authentifizierungsfluss im Produktionsmodus auf den neuen Passwort und OTP Authentifizierungsfluss
-browserFlow: "password and otp"
+browserFlow: "Username und Passwort und OTP oder Recovery"
 {% else %}
 # Im Entwicklungsmodus wird der Standard-Authentifizierungsfluss verwendet, um das Testen zu erleichtern.
 browserFlow: "browser"
