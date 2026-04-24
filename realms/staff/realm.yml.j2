@@ -161,12 +161,12 @@ clients:
     name: "App Zugriff"
     description: "Zugriff für App-Nutzer:innen"
     alwaysDisplayInConsole: false
-    rootUrl: "$(env:HOSTNAME)/staff"
-    baseUrl: "$(env:HOSTNAME)/staff"
+    rootUrl: "$(env:HOSTNAME)/api/auth"
+    baseUrl: "$(env:HOSTNAME)/api/auth"
     redirectUris:
-      - "$(env:HOSTNAME)/staff/*"
+      - "$(env:HOSTNAME)/api/auth/*"
     webOrigins:
-      - "$(env:HOSTNAME)/staff/*"
+      - "$(env:HOSTNAME)/api/auth/*"
     defaultClientScopes:
       - "basic"
       - "roles"
@@ -186,6 +186,7 @@ clients:
       frontchannel.logout.session.required: true # Setzt "Frontchannel Logout Session Required" auf True
       pkce.code.challenge.method: "S256" # Setzt "PKCE Code Challenge Method" auf S256
       post.logout.redirect.uris: "$(env:HOSTNAME)/staff/*" # Setzt die Post-Logout-Redirect-URIs
+      post.logout.redirect.uris: "$(env:HOSTNAME)/api/auth/*" # Setzt die Post-Logout-Redirect-URIs
 
 # Limitiere die standardmäßig zugewiesenen Client-Scopes
 defaultDefaultClientScopes:
