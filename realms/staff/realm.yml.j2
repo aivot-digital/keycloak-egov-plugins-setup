@@ -112,6 +112,36 @@ roles:
         clientRole: true
         attributes: { }
   realm:
+    # Die Admin-Rolle wird benötigt um in Gover als Administrator:in zu agieren.
+    # Sie sollte alle notwendigen Rechte besitzen um Nutzer:innen, Clients, Rollen und Identity Provider zu verwalten.
+    - name: "admin"
+      description: "Administrator:in mit Vollzugriff"
+      composite: true
+      composites:
+        client:
+          realm-management:
+            - "query-users"
+            - "manage-events"
+            - "query-clients"
+            - "view-realm"
+            - "manage-identity-providers"
+            - "view-clients"
+            - "impersonation"
+            - "create-client"
+            - "manage-realm"
+            - "manage-users"
+            - "realm-admin"
+            - "view-identity-providers"
+            - "view-users"
+            - "query-groups"
+            - "manage-authorization"
+            - "view-authorization"
+            - "view-events"
+            - "manage-clients"
+            - "query-realms"
+      clientRole: false
+      attributes: { }
+
     # Setze eine Standard-Rolle für alle Mitarbeiter:innen Nutzer:innen
     - name: "default-roles-staff"
       composites:
