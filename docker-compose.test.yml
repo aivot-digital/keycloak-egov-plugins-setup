@@ -18,12 +18,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        ENVIRONMENT: "development"
     depends_on:
       - keycloak
     restart: "no"
     environment:
+      ENVIRONMENT: "development"
       KEYCLOAK_URL: "http://keycloak:8080"
       HOSTNAME: "http://localhost:8080"
 

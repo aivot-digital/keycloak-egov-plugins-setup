@@ -1,8 +1,5 @@
 FROM python:3.13.7-alpine3.22 AS builder
 
-# Set environment to production
-ARG ENVIRONMENT=production
-
 RUN mkdir /app
 
 WORKDIR /app

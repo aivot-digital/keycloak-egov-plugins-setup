@@ -2,6 +2,19 @@
 
 kc=/app/keycloak-config-cli.jar
 
+case "${ENVIRONMENT:-production}" in
+    development|dev)
+        configs_dir=/configs/dev
+        ;;
+    production|prod)
+        configs_dir=/configs/prod
+        ;;
+    *)
+        echo "Unsupported ENVIRONMENT '${ENVIRONMENT}'. Use 'development' or 'production'."
+        exit 1
+        ;;
+esac
+
 # Try to apply the bootstrap master realm configuration to create the deployment client
 echo "Applying bootstrap master realm configuration..."
 java -jar ${kc} \
@@ -17,7 +30,7 @@ java -jar ${kc} \
     --keycloak.grant-type=client_credentials \
     --keycloak.client-id=${KEYCLOAK_DEPLOYMENT_CLIENT_NAME} \
     --keycloak.client-secret=${KEYCLOAK_DEPLOYMENT_CLIENT_SECRET} \
-    --import.files.locations=/configs/master.yml
+    --import.files.locations=${configs_dir}/master.yml
 
 if [ $? -ne 0 ]; then
     echo "Failed to apply master realm configuration"
@@ -31,7 +44,7 @@ java -jar ${kc} \
     --keycloak.grant-type=client_credentials \
     --keycloak.client-id=${KEYCLOAK_DEPLOYMENT_CLIENT_NAME} \
     --keycloak.client-secret=${KEYCLOAK_DEPLOYMENT_CLIENT_SECRET} \
-    --import.files.locations=/configs/staff.yml
+    --import.files.locations=${configs_dir}/staff.yml
 
 if [ $? -ne 0 ]; then
     echo "Failed to apply staff realm configuration"
@@ -45,7 +58,7 @@ java -jar ${kc} \
     --keycloak.grant-type=client_credentials \
     --keycloak.client-id=${KEYCLOAK_DEPLOYMENT_CLIENT_NAME} \
     --keycloak.client-secret=${KEYCLOAK_DEPLOYMENT_CLIENT_SECRET} \
-    --import.files.locations=/configs/customer.yml
+    --import.files.locations=${configs_dir}/customer.yml
 
 if [ $? -ne 0 ]; then
     echo "Failed to apply customer realm configuration"

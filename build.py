@@ -1,4 +1,3 @@
-import os
 import pathlib
 from os.path import join as join_path
 
@@ -10,9 +9,6 @@ from utils import load_csv, load_json, load_yaml, get_folders_in_dir, get_files_
 # Constants
 # ------------------------------------------------
 
-ENVIRONMENT_VAR = 'ENVIRONMENT'
-DEV_ENVIRONMENT_VALUE = 'development'
-
 REALMS_DIR = './realms'
 ADDITIONAL_CLIENT_SCOPES_CSV = 'additional-client-scopes.csv'
 ADDITIONAL_IDPS_DIR = 'idps'
@@ -21,12 +17,6 @@ ADDITIONAL_IDP_ATTRIBUTES_CSV = 'attributes.csv'
 ADDITIONAL_AUTHENTICATION_FLOWS_DIR = 'authentication-flows'
 
 GENERATED_DIR = './.generated'
-
-# ------------------------------------------------
-# Determine environment
-# ------------------------------------------------
-
-is_dev_environment = os.getenv(ENVIRONMENT_VAR) == DEV_ENVIRONMENT_VALUE
 
 # ------------------------------------------------
 # Determine realms
@@ -68,29 +58,27 @@ for realm, realm_path in get_folders_in_dir(REALMS_DIR):
     })
 
 # ------------------------------------------------
-# Prepare output directory
-# ------------------------------------------------
-
-pathlib.Path(GENERATED_DIR).mkdir(parents=True, exist_ok=True)
-
-# ------------------------------------------------
 # Generate realms
 # ------------------------------------------------
 
-for realm in realms:
-    config = {
-        'idps': realm['additional_idps'],
-        'stork': realm['additional_client_scopes'],
-        'flows': realm['additional_authentication_flows'],
-        'additional_authenticator_configs': realm['additional_authenticator_configs'],
-        'is_dev': is_dev_environment,
-        'is_prod': not is_dev_environment,
-    }
+for environment, is_prod in [('dev', False), ('prod', True)]:
+    output_dir = join_path(GENERATED_DIR, environment)
+    pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
 
-    templates = Environment(loader=FileSystemLoader('./realms/' + realm['name']))
+    for realm in realms:
+        config = {
+            'idps': realm['additional_idps'],
+            'stork': realm['additional_client_scopes'],
+            'flows': realm['additional_authentication_flows'],
+            'additional_authenticator_configs': realm['additional_authenticator_configs'],
+            'is_dev': not is_prod,
+            'is_prod': is_prod,
+        }
 
-    template = templates.get_template('realm.yml.j2')
-    output = template.render(**config)
+        templates = Environment(loader=FileSystemLoader('./realms/' + realm['name']))
 
-    with open(join_path(GENERATED_DIR, realm['name'] + '.yml'), 'w', encoding='UTF-8') as f:
-        f.write(output)
+        template = templates.get_template('realm.yml.j2')
+        output = template.render(**config)
+
+        with open(join_path(output_dir, realm['name'] + '.yml'), 'w', encoding='UTF-8') as f:
+            f.write(output)
