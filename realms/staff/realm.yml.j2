@@ -88,7 +88,11 @@ clientOfflineSessionIdleTimeout: 0 # Deaktiviert die Offline Session
 clientOfflineSessionMaxLifespan: 0 # Deaktiviert die Offline Session
 
 # Setze die Passwort-Richtlinien für den Realm
+{% if is_prod %}
 passwordPolicy: "length(12) and upperCase(1) and lowerCase(1) and digits(1) and specialChars(1) and notUsername(undefined) and notEmail(undefined) and notContainsUsername(undefined) and maxAuthAge(0) and passwordBlacklist(100k_passwords.txt)"
+{% else %}
+passwordPolicy: ""
+{% endif %}
 
 # Aktiviere das User-Event-Logging für den Realm und setze die Aufbewahrungsdauer
 eventsEnabled: true
