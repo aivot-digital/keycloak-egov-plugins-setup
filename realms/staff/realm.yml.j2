@@ -25,9 +25,9 @@ registrationEmailAsUsername: true
 loginWithEmailAllowed: true
 verifyEmail: true
 duplicateEmailsAllowed: false
-# Erlaube die Bearbeitung des Nutzernamens durch Nutzer:innen damit diese eigenständig Ihre E-Mail-Adresse ändern können.
-# Dies ist notwendig, da wir die E-Mail-Adresse als Nutzernamen verwenden.
-editUsernameAllowed: true
+# Verbiete die Bearbeitung des Nutzernamens durch Nutzer:innen.
+# Da die E-Mail-Adresse als Nutzername verwendet wird, verhindert dies auch die eigenständige Änderung der Login-ID.
+editUsernameAllowed: false
 
 # Setze die SMTP-Einstellungen für den E-Mail-Versand
 smtpServer:
@@ -105,6 +105,75 @@ adminEventsEnabled: true
 adminEventsDetailsEnabled: false
 attributes:
   adminEventsExpiration: "31536000"
+  userProfileEnabled: "true"
+
+# Verbiete die eigenständige Änderung der Basis-Profilattribute durch Nutzer:innen.
+# Admins können diese Werte weiterhin über Admin Console und Admin REST API pflegen.
+userProfile:
+  unmanagedAttributePolicy: "ADMIN_EDIT"
+  attributes:
+    - name: "username"
+      displayName: "${username}"
+      multivalued: false
+      validations:
+        length:
+          min: 3
+          max: 255
+        username-prohibited-characters: { }
+        up-username-not-idn-homograph: { }
+      permissions:
+        view:
+          - "admin"
+          - "user"
+        edit:
+          - "admin"
+    - name: "email"
+      displayName: "${email}"
+      multivalued: false
+      validations:
+        email: { }
+        length:
+          max: 255
+      permissions:
+        view:
+          - "admin"
+          - "user"
+        edit:
+          - "admin"
+    - name: "firstName"
+      displayName: "${firstName}"
+      multivalued: false
+      required:
+        roles:
+          - "admin"
+          - "user"
+      validations:
+        length:
+          max: 255
+        person-name-prohibited-characters: { }
+      permissions:
+        view:
+          - "admin"
+          - "user"
+        edit:
+          - "admin"
+    - name: "lastName"
+      displayName: "${lastName}"
+      multivalued: false
+      required:
+        roles:
+          - "admin"
+          - "user"
+      validations:
+        length:
+          max: 255
+        person-name-prohibited-characters: { }
+      permissions:
+        view:
+          - "admin"
+          - "user"
+        edit:
+          - "admin"
 
 # Lege Rollen für den Realm an
 roles:
