@@ -43,9 +43,9 @@ smtpServer:
   envelopeFrom: ""
 
 # Setze die Themes für den Realm damit das Corporate Design verwendet wird
-loginTheme: "gover"
-accountTheme: "gover"
-adminTheme: "gover"
+loginTheme: "prosuna"
+accountTheme: "prosuna"
+adminTheme: "prosuna"
 emailTheme: "keycloak"
 
 # Setze Lokalisierungseinstellungen damit deutsche Texte verwendet werden
@@ -178,7 +178,7 @@ clientScopes:
 
 # Lege die Clients für den Realm an
 clients:
-  # Der App-Client wird von der Gover Kund:innen App verwendet, um Kund:innen zu authentifizieren.
+  # Der App-Client wird von der Prosuna Kund:innen App verwendet, um Kund:innen zu authentifizieren.
   - enabled: true
     protocol: "openid-connect"
     clientId: app
@@ -269,7 +269,7 @@ identityProviders:
       principalAttribute: "{{ idp.principal_attribute }}"
       allowCreate: "{% if idp.allow_create %}true{% else %}false{% endif %}"
       entityId: "$(env:HOSTNAME)/idp/realms/customer"
-      attributeConsumingServiceName: "Gover"
+      attributeConsumingServiceName: "Prosuna"
       postBindingResponse: "true"
       artifactBindingResponse: "false"
       postBindingAuthnRequest: "true"

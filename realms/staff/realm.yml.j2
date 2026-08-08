@@ -1,7 +1,7 @@
 # Der Name und die Anzeigeinformation des Realms
 realm: "staff"
-displayName: "Gover Mitarbeiter:innen"
-displayNameHtml: "<div class=\"kc-logo-text\"><span>Gover Mitarbeiter:innen</span></div>"
+displayName: "Prosuna Mitarbeiter:innen"
+displayNameHtml: "<div class=\"kc-logo-text\"><span>Prosuna Mitarbeiter:innen</span></div>"
 
 # Aktiviere den Realm
 enabled: true
@@ -45,9 +45,9 @@ smtpServer:
   envelopeFrom: ""
 
 # Setze die Themes für den Realm damit das Corporate Design verwendet wird
-loginTheme: "gover"
-accountTheme: "gover"
-adminTheme: "gover"
+loginTheme: "prosuna"
+accountTheme: "prosuna"
+adminTheme: "prosuna"
 emailTheme: "keycloak"
 
 # Setze Lokalisierungseinstellungen damit deutsche Texte verwendet werden
@@ -185,7 +185,7 @@ roles:
         clientRole: true
         attributes: { }
   realm:
-    # Die Admin-Rolle wird benötigt um in Gover als Administrator:in zu agieren.
+    # Die Admin-Rolle wird benötigt um in Keycloak bzw. dem jeweiligen Realm als Administrator:in zu agieren.
     # Sie sollte alle notwendigen Rechte besitzen um Nutzer:innen, Clients, Rollen und Identity Provider zu verwalten.
     - name: "admin"
       description: "Administrator:in mit Vollzugriff"
@@ -256,7 +256,7 @@ clients:
       oauth2.device.authorization.grant.enabled: false # Setzt "OAuth2 Device Authorization Grant" auf False
       pkce.code.challenge.method: "S256" # Setzt "PKCE Code Challenge Method" auf S256
 
-  # Der App-Client wird von der Gover Mitarbeiter:innen App verwendet, um Nutzer:innen zu authentifizieren.
+  # Der App-Client wird von der Prosuna Mitarbeiter:innen App verwendet, um Nutzer:innen zu authentifizieren.
   # Er besitzt Login-Möglichkeiten und ist für den Authorization Code Flow konfiguriert.
   - enabled: true
     protocol: "openid-connect"
