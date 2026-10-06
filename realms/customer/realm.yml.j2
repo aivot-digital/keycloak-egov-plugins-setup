@@ -170,7 +170,7 @@ clientScopes:
           user.attribute: "{{ attribute.user_attribute_name }}"
           id.token.claim: "true"
           access.token.claim: "true"
-          claim.name: "{{ attribute.user_attribute_name }}"
+          claim.name: "{{ attribute.claim_name }}"
           jsonType.label: "String"
           userinfo.token.claim: "true"
      {% endfor %}

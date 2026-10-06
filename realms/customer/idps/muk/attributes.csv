@@ -1,28 +1,28 @@
-label,user_attribute_name,attribute_format,friendly_name,attribute_name
-Firmenname,orgCompanyName,basic,Firmenname,Firmenname
-Rechtsform Code (Rechtsform),orgLegalFormCode,basic,Rechtsform,Rechtsform
-Rechtsform (RechtsformText),orgLegalFormText,basic,RechtsformText,RechtsformText
-Registerart,orgRegisterType,basic,Registerart,Registerart
-Registergericht,orgRegisterCourt,basic,Registergericht,Registergericht
-Registernummer,orgRegisterNumber,basic,Registernummer,Registernummer
-Tätigkeit Code (Taetigkeit),orgOccupationCode,basic,Taetigkeit,Taetigkeit
-Tätigkeit (TaetigkeitText),orgOccupationText,basic,TaetigkeitText,TaetigkeitText
-Unternehmensanschrift: Typ,orgAddressType,xpath,//ekona:Typ,Unternehmensanschrift
-Unternehmensanschrift: Straße,orgStreet,xpath,//ekona:Strasse,Unternehmensanschrift
-Unternehmensanschrift: Hausnummer,orgBuilding,xpath,//ekona:Hausnummer,Unternehmensanschrift
-Unternehmensanschrift: Postleitzahl,orgZipCode,xpath,//ekona:PLZ,Unternehmensanschrift
-Unternehmensanschrift: Ort,orgCity,xpath,//ekona:Ort,Unternehmensanschrift
-Unternehmensanschrift: Ortsteil,orgCityDistrict,xpath,//ekona:Ortsteil,Unternehmensanschrift
-Unternehmensanschrift: Adressergänzung,orgAddressAddition,xpath,//ekona:Adressergaenzung,Unternehmensanschrift
-Unternehmensanschrift: Land,orgCountry,xpath,//ekona:Land,Unternehmensanschrift
-Handelnde Person: Akademischer Grad,title,xpath,//ekona:AkademischerGrad,HandelndePerson
-Handelnde Person: Namensvorsatz,salutation,xpath,//ekona:Namensvorsatz,HandelndePerson
-Handelnde Person: Vorname,firstName,xpath,//ekona:Vorname,HandelndePerson
-Handelnde Person: Nachname,lastName,xpath,//ekona:Nachname,HandelndePerson
-Handelnde Person: Namenszusatz,zusatzName,xpath,//ekona:Namenszusatz,HandelndePerson
-Handelnde Person: Geburtsdatum,dateOfBirth,xpath,//ekona:Geburtsdatum,HandelndePerson
-Vertrauensniveau Identifizierung,trustLevelIdentification,basic,ElsterVertrauensniveauIdentifizierung,ElsterVertrauensniveauIdentifizierung
-Datenkranz Typ,elsterDatenkranzTyp,basic,DatenkranzTyp,DatenkranzTyp
-Vertrauensniveau Authentifizierung,trustLevelAuthentication,basic,ElsterVertrauensniveauAuthentifizierung,ElsterVertrauensniveauAuthentifizierung
-Identitätstyp (PersTyp),elsterIdentitaetstyp,basic,PersTyp,PersTyp
-Datenübermittler Pseudonym ID,elsterDatenuebermittlerPseudonymID,basic,DatenuebermittlerPseudonymId,DatenuebermittlerPseudonymId
+label,user_attribute_name,attribute_format,friendly_name,attribute_name,claim_name
+Firmenname,orgCompanyName,basic,Firmenname,Firmenname,org_company_name
+Rechtsform Code (Rechtsform),orgLegalFormCode,basic,Rechtsform,Rechtsform,org_legal_form_code
+Rechtsform (RechtsformText),orgLegalFormText,basic,RechtsformText,RechtsformText,org_legal_form_text
+Registerart,orgRegisterType,basic,Registerart,Registerart,org_register_type
+Registergericht,orgRegisterCourt,basic,Registergericht,Registergericht,org_register_court
+Registernummer,orgRegisterNumber,basic,Registernummer,Registernummer,org_register_number
+Tätigkeit Code (Taetigkeit),orgOccupationCode,basic,Taetigkeit,Taetigkeit,org_occupation_code
+Tätigkeit (TaetigkeitText),orgOccupationText,basic,TaetigkeitText,TaetigkeitText,org_occupation_text
+Unternehmensanschrift: Typ,orgAddressType,xpath,//ekona:Typ,Unternehmensanschrift,org_address_type
+Unternehmensanschrift: Straße,orgStreet,xpath,//ekona:Strasse,Unternehmensanschrift,org_street
+Unternehmensanschrift: Hausnummer,orgBuilding,xpath,//ekona:Hausnummer,Unternehmensanschrift,org_building
+Unternehmensanschrift: Postleitzahl,orgZipCode,xpath,//ekona:PLZ,Unternehmensanschrift,org_zip_code
+Unternehmensanschrift: Ort,orgCity,xpath,//ekona:Ort,Unternehmensanschrift,org_city
+Unternehmensanschrift: Ortsteil,orgCityDistrict,xpath,//ekona:Ortsteil,Unternehmensanschrift,org_city_district
+Unternehmensanschrift: Adressergänzung,orgAddressAddition,xpath,//ekona:Adressergaenzung,Unternehmensanschrift,org_address_addition
+Unternehmensanschrift: Land,orgCountry,xpath,//ekona:Land,Unternehmensanschrift,org_country
+Handelnde Person: Akademischer Grad,title,xpath,//ekona:AkademischerGrad,HandelndePerson,title
+Handelnde Person: Namensvorsatz,salutation,xpath,//ekona:Namensvorsatz,HandelndePerson,salutation
+Handelnde Person: Vorname,firstName,xpath,//ekona:Vorname,HandelndePerson,given_name
+Handelnde Person: Nachname,lastName,xpath,//ekona:Nachname,HandelndePerson,family_name
+Handelnde Person: Namenszusatz,zusatzName,xpath,//ekona:Namenszusatz,HandelndePerson,zusatz_name
+Handelnde Person: Geburtsdatum,dateOfBirth,xpath,//ekona:Geburtsdatum,HandelndePerson,date_of_birth
+Vertrauensniveau Identifizierung,trustLevelIdentification,basic,ElsterVertrauensniveauIdentifizierung,ElsterVertrauensniveauIdentifizierung,trust_level_identification
+Datenkranz Typ,elsterDatenkranzTyp,basic,DatenkranzTyp,DatenkranzTyp,elster_datenkranz_typ
+Vertrauensniveau Authentifizierung,trustLevelAuthentication,basic,ElsterVertrauensniveauAuthentifizierung,ElsterVertrauensniveauAuthentifizierung,trust_level_authentication
+Identitätstyp (PersTyp),elsterIdentitaetstyp,basic,PersTyp,PersTyp,elster_identitaetstyp
+Datenübermittler Pseudonym ID,elsterDatenuebermittlerPseudonymID,basic,DatenuebermittlerPseudonymId,DatenuebermittlerPseudonymId,elster_datenuebermittler
