@@ -1,4 +1,4 @@
-FROM python:3.13.7-alpine3.22 AS builder
+FROM docker.io/library/python:3.13.7-alpine3.22 AS builder
 
 RUN mkdir /app
 
@@ -13,7 +13,7 @@ COPY ./utils.py /app/utils.py
 
 RUN python build.py
 
-FROM adorsys/keycloak-config-cli:6.5.1-21.1.2
+FROM docker.io/adorsys/keycloak-config-cli:6.5.1-21.1.2
 
 # Set build version and date
 ARG BUILD_VERSION=0.0.0
