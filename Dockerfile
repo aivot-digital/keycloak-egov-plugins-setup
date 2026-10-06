@@ -13,7 +13,7 @@ COPY ./utils.py /app/utils.py
 
 RUN python build.py
 
-FROM adorsys/keycloak-config-cli:6.4.0-26.1.0
+FROM adorsys/keycloak-config-cli:6.5.1-21.1.2
 
 # Set build version and date
 ARG BUILD_VERSION=0.0.0
