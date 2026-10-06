@@ -13,7 +13,7 @@ COPY ./utils.py /app/utils.py
 
 RUN python build.py
 
-FROM docker.io/adorsys/keycloak-config-cli:6.5.1-21.1.2
+FROM docker.io/adorsys/keycloak-config-cli:6.5.1-26.5.5
 
 # Set build version and date
 ARG BUILD_VERSION=0.0.0
