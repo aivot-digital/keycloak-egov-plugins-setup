@@ -119,7 +119,9 @@ users:
     notBefore: 0
     groups: [ ]
     credentials:
+      # userLabel "initial" sorgt dafür, dass keycloak-config-cli das Passwort nur beim Anlegen des Benutzers setzt
       - type: "password"
+        userLabel: "initial"
         value: "$(env:KEYCLOAK_ADMIN_PASSWORD)"
         temporary: true
 

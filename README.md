@@ -30,7 +30,8 @@ Default test credentials:
 - Configured admin: `superuser` / `My-Super-Secret-Password-No.1`
 
 The configured admin password is temporary. Keycloak will ask for a password
-change after login.
+change after login. It is only set when the admin user is created; later setup
+runs do not reset it (the credential is marked with `userLabel: "initial"`).
 
 ## Updating A Running Setup
 
