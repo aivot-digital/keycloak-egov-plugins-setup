@@ -32,6 +32,8 @@ Default test credentials:
 The configured admin password is temporary. Keycloak will ask for a password
 change after login. It is only set when the admin user is created; later setup
 runs do not reset it (the credential is marked with `userLabel: "initial"`).
+Later runs also leave the admin's OTP and pending required actions (for example
+the forced password change) untouched.
 
 ## Updating A Running Setup
 
