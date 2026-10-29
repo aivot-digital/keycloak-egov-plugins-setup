@@ -72,8 +72,10 @@ timeout when the system is already configured.
 `KEYCLOAK_REALMS` selects the realms a run applies, in the given order (default:
 `master,staff,customer`). The staff and customer realm names are set with
 `KEYCLOAK_STAFF_REALM_NAME` (default: `staff`) and `KEYCLOAK_CUSTOMER_REALM_NAME`
-(default: `customer`). Names may only contain letters, digits, `_` and `-`, and
-must not be `master`.
+(default: `customer`). Names may only contain lowercase letters, digits, `_` and
+`-`, must not be `master`, and the staff and customer names must differ. Staff
+realm names must also differ from the customer realm name used in other runs;
+the setup cannot detect that across runs.
 
 To deploy several staff realms, run the container once for `master,customer` and
 then once per staff realm with `KEYCLOAK_REALMS=staff`, each with its own

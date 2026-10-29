@@ -232,13 +232,20 @@ for realm in "${realm_templates[@]}"; do
 done
 
 # The names are inserted verbatim into the realm YAML, and the master realm must
-# never be overwritten with the staff or customer configuration.
+# never be overwritten with the staff or customer configuration. Lowercase only,
+# because Keycloak names the default role "default-roles-<lowercased name>".
 for realm_name in "${KEYCLOAK_STAFF_REALM_NAME}" "${KEYCLOAK_CUSTOMER_REALM_NAME}"; do
-    if [[ ! "${realm_name}" =~ ^[A-Za-z0-9_-]+$ ]] || [ "${realm_name}" = "master" ]; then
-        echo "Invalid realm name '${realm_name}'. Use only letters, digits, '_' and '-', and not 'master'."
+    if [[ ! "${realm_name}" =~ ^[a-z0-9_-]+$ ]] || [ "${realm_name}" = "master" ]; then
+        echo "Invalid realm name '${realm_name}'. Use only lowercase letters, digits, '_' and '-', and not 'master'."
         exit 1
     fi
 done
+
+# Importing both templates into one realm would overwrite the staff configuration.
+if [ "${KEYCLOAK_STAFF_REALM_NAME}" = "${KEYCLOAK_CUSTOMER_REALM_NAME}" ]; then
+    echo "KEYCLOAK_STAFF_REALM_NAME and KEYCLOAK_CUSTOMER_REALM_NAME must differ (both are '${KEYCLOAK_STAFF_REALM_NAME}')."
+    exit 1
+fi
 
 echo "Selected realms: ${realm_templates[*]} (staff realm name: ${KEYCLOAK_STAFF_REALM_NAME}, customer realm name: ${KEYCLOAK_CUSTOMER_REALM_NAME})"
 
