@@ -67,6 +67,28 @@ configuration. The entrypoint therefore checks the credentials before importing:
 This avoids waiting through the default `120s` `keycloak-config-cli` availability
 timeout when the system is already configured.
 
+## Selecting Realms
+
+`KEYCLOAK_REALMS` selects the realms a run applies, in the given order (default:
+`master,staff,customer`). The staff and customer realm names are set with
+`KEYCLOAK_STAFF_REALM_NAME` (default: `staff`) and `KEYCLOAK_CUSTOMER_REALM_NAME`
+(default: `customer`). Names may only contain letters, digits, `_` and `-`, and
+must not be `master`.
+
+To deploy several staff realms, run the container once for `master,customer` and
+then once per staff realm with `KEYCLOAK_REALMS=staff`, each with its own
+`KEYCLOAK_STAFF_REALM_NAME`, `HOSTNAME` and `BACKEND_CLIENT_SECRET`. A staff-only
+run does not need the `KEYCLOAK_ADMIN_*` variables. On a fresh Keycloak, let the
+first run finish before starting the others, so only one run performs the
+bootstrap import. `docker-compose.test.yml` shows this with a second staff realm.
+
+Notes:
+
+- Realms that are no longer selected are not deleted from Keycloak.
+- The customer realm name is part of its SAML entity ID
+  (`$HOSTNAME/idp/realms/<name>`). Renaming it requires registering the new entity
+  ID with the identity providers.
+
 ## Configuration Layout
 
 - `master/bootstrap-master.yml`: minimal first-run setup for the deployment client
@@ -91,6 +113,8 @@ docker build -t keycloak-egov-plugins-setup .
 ## Important Environment Variables
 
 - `ENVIRONMENT`: `development`, `dev`, `production` or `prod`
+- `KEYCLOAK_REALMS`, `KEYCLOAK_STAFF_REALM_NAME`, `KEYCLOAK_CUSTOMER_REALM_NAME`:
+  see [Selecting Realms](#selecting-realms)
 - `KEYCLOAK_URL`: internal Keycloak URL, for example `http://keycloak:8080`
 - `HOSTNAME`: external application hostname used in realm/client configuration
 - `KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME`

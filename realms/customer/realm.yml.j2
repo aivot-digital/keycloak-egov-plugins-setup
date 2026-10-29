@@ -1,5 +1,5 @@
 # Der Name und die Anzeigeinformation des Realms
-realm: "customer"
+realm: "$(env:KEYCLOAK_CUSTOMER_REALM_NAME)"
 displayName: "Nutzerkonten-Anbindung"
 displayNameHtml: "<div class=\"kc-logo-text\"><span>Nutzerkonten-Anbindung</span></div>"
 
@@ -139,7 +139,7 @@ roles:
         clientRole: true
         attributes: { }
   realm:
-    - name: "default-roles-customer"
+    - name: "default-roles-$(env:KEYCLOAK_CUSTOMER_REALM_NAME)"
       composites:
         realm: [ ] # Entferne alle Standard-Rollen
         client:
@@ -268,7 +268,7 @@ identityProviders:
       principalType: "{{ idp.principal_type }}"
       principalAttribute: "{{ idp.principal_attribute }}"
       allowCreate: "{% if idp.allow_create %}true{% else %}false{% endif %}"
-      entityId: "$(env:HOSTNAME)/idp/realms/customer"
+      entityId: "$(env:HOSTNAME)/idp/realms/$(env:KEYCLOAK_CUSTOMER_REALM_NAME)"
       attributeConsumingServiceName: "Prosuna"
       postBindingResponse: "true"
       artifactBindingResponse: "false"

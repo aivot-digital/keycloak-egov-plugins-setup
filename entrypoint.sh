@@ -212,6 +212,36 @@ case "${ENVIRONMENT:-production}" in
         ;;
 esac
 
+# Select the realms this run applies and their names. Several staff realms are
+# deployed by running the container once per staff realm.
+realms="${KEYCLOAK_REALMS:-master,staff,customer}"
+IFS=',' read -ra realm_templates <<< "${realms// /}"
+export KEYCLOAK_STAFF_REALM_NAME="${KEYCLOAK_STAFF_REALM_NAME:-staff}"
+export KEYCLOAK_CUSTOMER_REALM_NAME="${KEYCLOAK_CUSTOMER_REALM_NAME:-customer}"
+
+# Validate before contacting Keycloak, so misconfigurations fail without waiting
+# for the credential check.
+for realm in "${realm_templates[@]}"; do
+    case "${realm}" in
+        master|staff|customer) ;;
+        *)
+            echo "Unsupported realm '${realm}' in KEYCLOAK_REALMS. Use 'master', 'staff' or 'customer'."
+            exit 1
+            ;;
+    esac
+done
+
+# The names are inserted verbatim into the realm YAML, and the master realm must
+# never be overwritten with the staff or customer configuration.
+for realm_name in "${KEYCLOAK_STAFF_REALM_NAME}" "${KEYCLOAK_CUSTOMER_REALM_NAME}"; do
+    if [[ ! "${realm_name}" =~ ^[A-Za-z0-9_-]+$ ]] || [ "${realm_name}" = "master" ]; then
+        echo "Invalid realm name '${realm_name}'. Use only letters, digits, '_' and '-', and not 'master'."
+        exit 1
+    fi
+done
+
+echo "Selected realms: ${realm_templates[*]} (staff realm name: ${KEYCLOAK_STAFF_REALM_NAME}, customer realm name: ${KEYCLOAK_CUSTOMER_REALM_NAME})"
+
 bootstrap_required=false
 
 # First classify the Keycloak state. This keeps initial setup and update runs
@@ -229,22 +259,14 @@ if [ "${bootstrap_required}" = "true" ]; then
     fi
 fi
 
-# Apply the desired state in dependency order: master first because it owns the
-# deployment client/admin users, then the application realms.
-if ! run_deployment_import "master" "${configs_dir}/master.yml"; then
-    echo "Failed to apply master realm configuration"
-    exit 1
-fi
-
-if ! run_deployment_import "staff" "${configs_dir}/staff.yml"; then
-    echo "Failed to apply staff realm configuration"
-    exit 1
-fi
-
-if ! run_deployment_import "customer" "${configs_dir}/customer.yml"; then
-    echo "Failed to apply customer realm configuration"
-    exit 1
-fi
+# Apply the selected realms in the configured order. The default puts master
+# first because it owns the deployment client/admin users.
+for realm in "${realm_templates[@]}"; do
+    if ! run_deployment_import "${realm}" "${configs_dir}/${realm}.yml"; then
+        echo "Failed to apply ${realm} realm configuration"
+        exit 1
+    fi
+done
 
 echo "All configurations applied successfully."
 
