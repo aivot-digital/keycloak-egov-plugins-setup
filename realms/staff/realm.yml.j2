@@ -1,5 +1,5 @@
 # Der Name und die Anzeigeinformation des Realms
-realm: "staff"
+realm: "$(env:KEYCLOAK_STAFF_REALM_NAME)"
 displayName: "Prosuna Mitarbeiter:innen"
 displayNameHtml: "<div class=\"kc-logo-text\"><span>Prosuna Mitarbeiter:innen</span></div>"
 
@@ -216,7 +216,7 @@ roles:
       attributes: { }
 
     # Setze eine Standard-Rolle für alle Mitarbeiter:innen Nutzer:innen
-    - name: "default-roles-staff"
+    - name: "default-roles-$(env:KEYCLOAK_STAFF_REALM_NAME)"
       composites:
         realm:
           - "uma_authorization"
@@ -309,7 +309,7 @@ users:
     disableableCredentialTypes: [ ]
     requiredActions: [ ]
     realmRoles:
-      - "default-roles-staff"
+      - "default-roles-$(env:KEYCLOAK_STAFF_REALM_NAME)"
     clientRoles:
       "realm-management":
         - "view-users"

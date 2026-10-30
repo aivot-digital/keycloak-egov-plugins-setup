@@ -109,9 +109,7 @@ users:
     email: "$(env:KEYCLOAK_ADMIN_EMAIL)"
     emailVerified: false # E-Mail Verifizierung deaktivieren
     enabled: true
-    totp: false
-    disableableCredentialTypes: [ ]
-    requiredActions: [ ]
+    # Keine requiredActions setzen: eine leere Liste würde bei jedem Lauf ausstehende Aktionen (Passwort ändern, OTP einrichten) entfernen
     realmRoles:
       - "default-roles-master"
       - "admin"

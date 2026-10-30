@@ -21,8 +21,9 @@ services:
     depends_on:
       - keycloak
     restart: "no"
-    environment:
+    environment: &setup-environment
       ENVIRONMENT: "development"
+      KEYCLOAK_REALMS: "master,staff,customer"
       KEYCLOAK_URL: "http://keycloak:8080"
       HOSTNAME: "http://localhost:8080"
 
@@ -48,6 +49,22 @@ services:
       SMTP_FROM_DISPLAY: "Mail Test"
 
       BACKEND_CLIENT_SECRET: "my-super-secret-key"
+
+  # Zweiter Staff-Realm in einem eigenen Lauf, erst nach dem ersten Lauf, damit nur dieser den Bootstrap-Import ausführt
+  keycloak-setup-staff-two:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      keycloak-setup:
+        condition: service_completed_successfully
+    restart: "no"
+    environment:
+      <<: *setup-environment
+      KEYCLOAK_REALMS: "staff"
+      KEYCLOAK_STAFF_REALM_NAME: "staff-two"
+      HOSTNAME: "http://staff-two.localhost:8080"
+      BACKEND_CLIENT_SECRET: "my-other-super-secret-key"
 
   smtp:
     image: docker.io/axllent/mailpit:v1.27.10
