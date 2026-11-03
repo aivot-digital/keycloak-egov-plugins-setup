@@ -202,6 +202,7 @@ clients:
     {% for level in stork %}
       - "{{ level.scope }}"
     {% endfor %}
+    fullScopeAllowed: false # Keine Rollen im Token, da die App sie nicht auswertet
     publicClient: true # Setzt "Client authentication" auf False
     standardFlowEnabled: true
     implicitFlowEnabled: false

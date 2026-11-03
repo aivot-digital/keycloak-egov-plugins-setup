@@ -248,6 +248,7 @@ clients:
     frontchannelLogout: false
     clientAuthenticatorType: "client-secret"
     secret: "$(env:BACKEND_CLIENT_SECRET)"
+    fullScopeAllowed: false # Nur die unter clientScopeMappings freigegebenen Rollen landen im Token
     defaultClientScopes: []  # Setze keine standardmäßigen Scopes
     optionalClientScopes: []  # Setze keine optionalen Scopes
     attributes:
@@ -276,6 +277,7 @@ clients:
       - "profile"
       - "email"
     optionalClientScopes: [] # Setze keine optionalen Scopes
+    fullScopeAllowed: false # Keine Rollen im Token, da die App sie nicht auswertet
     publicClient: true # Setzt "Client authentication" auf False
     standardFlowEnabled: true
     implicitFlowEnabled: false
@@ -289,6 +291,22 @@ clients:
       frontchannel.logout.session.required: true # Setzt "Frontchannel Logout Session Required" auf True
       pkce.code.challenge.method: "S256" # Setzt "PKCE Code Challenge Method" auf S256
       post.logout.redirect.uris: "$(env:HOSTNAME)/api/auth/*" # Setzt die Post-Logout-Redirect-URIs
+
+# Lege fest, welche Client-Rollen in die Tokens der Clients ohne Full Scope gelangen.
+# keycloak-config-cli entfernt alle hier nicht aufgeführten Zuordnungen, daher muss auch die Keycloak-Standardzuordnung
+# für die Account Console erhalten bleiben.
+clientScopeMappings:
+  account:
+    - client: "account-console"
+      roles:
+        - "manage-account"
+        - "view-groups"
+  # Die Admin-API prüft die Rollen im Token des Backends, ohne diese Zuordnung schlägt die Nutzer-Synchronisation fehl
+  realm-management:
+    - client: "backend"
+      roles:
+        - "view-users"
+        - "manage-users"
 
 # Limitiere die standardmäßig zugewiesenen Client-Scopes
 defaultDefaultClientScopes:
