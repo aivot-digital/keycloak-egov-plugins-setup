@@ -6,6 +6,10 @@ displayNameHtml: "<div class=\"kc-logo-text\"><span>Nutzerkonten-Anbindung</span
 # Aktiviere den Realm
 enabled: true
 
+# Erzwinge HTTPS für alle Anfragen in Produktion, dort läuft Keycloak immer hinter einem Proxy mit https-Hostname (KC_HOSTNAME).
+# Die Entwicklungsumgebung läuft unter http://localhost, daher gilt dort nur "external".
+sslRequired: {% if is_prod %}"all"{% else %}"external"{% endif %}
+
 # Verbiete die Selbstverwaltung von Nutzer:innen
 userManagedAccessAllowed: false
 # Verbiete die Nutzung von Organisationen

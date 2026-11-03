@@ -6,6 +6,10 @@ displayNameHtml: "<div class=\"kc-logo-text\"><span>Keycloak Administration</spa
 # Aktiviere den Realm
 enabled: true
 
+# Erzwinge HTTPS für alle Anfragen in Produktion, dort läuft Keycloak immer hinter einem Proxy mit https-Hostname (KC_HOSTNAME).
+# Die Entwicklungsumgebung läuft unter http://localhost, daher gilt dort nur "external".
+sslRequired: {% if is_prod %}"all"{% else %}"external"{% endif %}
+
 # Verbiete die Registrierung neuer Nutzer:innen sodass nur Administrator:innen Nutzer:innen anlegen können
 registrationAllowed: false
 # Verbiete das Zurücksetzen von Passwörtern durch Nutzer:innen

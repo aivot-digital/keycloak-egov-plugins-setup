@@ -106,6 +106,12 @@ The Docker build runs `build.py` and copies the generated files into `/configs`.
 At runtime, `ENVIRONMENT=development` uses `/configs/dev`; `ENVIRONMENT=production`
 uses `/configs/prod`.
 
+In production, all realms require HTTPS for every request (`sslRequired: all`).
+Keycloak must run with `KC_HOSTNAME` set to its public `https://` URL. Keycloak
+checks the scheme of that URL, so internal plain-HTTP calls (setup sidecar,
+backend) keep working. With an `http://` hostname, Keycloak rejects logins and
+token requests in every realm, including the master realm admin console.
+
 ## Building The Setup Image
 
 ```bash
