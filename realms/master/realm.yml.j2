@@ -127,6 +127,17 @@ users:
         value: "$(env:KEYCLOAK_ADMIN_PASSWORD)"
         temporary: true
 
+# Neue Nutzer:innen müssen beim ersten Login Recovery Codes erzeugen (nur in Produktion, wie der OTP-Zwang).
+# Standardaktionen gelten nur für neu angelegte Nutzer:innen, bestehende brauchen die Aktion einmalig manuell.
+requiredActions:
+  - alias: "CONFIGURE_RECOVERY_AUTHN_CODES"
+    name: "Recovery Authentication Codes"
+    providerId: "CONFIGURE_RECOVERY_AUTHN_CODES"
+    enabled: true
+    defaultAction: {% if is_prod %}true{% else %}false{% endif %}
+    priority: 130
+    config: {}
+
 # Lege die Authentifizierungsflüsse für den Realm fest
 authenticationFlows:
   {% for flow in flows %}

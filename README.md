@@ -112,6 +112,12 @@ checks the scheme of that URL, so internal plain-HTTP calls (setup sidecar,
 backend) keep working. With an `http://` hostname, Keycloak rejects logins and
 token requests in every realm, including the master realm admin console.
 
+In production, new users in the staff and master realms must create recovery
+codes on their first login (default required action). Keycloak applies default
+required actions only when a user is created, so users that already exist need
+the "Recovery Authentication Codes" required action assigned once in the admin
+console.
+
 ## Building The Setup Image
 
 ```bash
