@@ -91,6 +91,18 @@ Notes:
   (`$HOSTNAME/idp/realms/<name>`). Renaming it requires registering the new entity
   ID with the identity providers.
 
+## Login Flow
+
+In production, the staff and master realms use the flow `username und otp`
+(`realms/*/authentication-flows/password-otp.yml`): username and password, then
+an OTP or a recovery code. Users without OTP must set it up during login.
+Development uses the Keycloak default `browser` flow.
+
+With `KEYCLOAK_PASSKEYS_ENABLED=true`, the login form also offers sign-in with a
+passkey. A passkey login skips the OTP step, because the passkey policy requires
+user verification (PIN or biometrics). Users register passkeys in the account
+console. Password and OTP keep working for everyone.
+
 ## Configuration Layout
 
 - `master/bootstrap-master.yml`: minimal first-run setup for the deployment client
@@ -129,6 +141,7 @@ docker build -t keycloak-egov-plugins-setup .
 - `ENVIRONMENT`: `development`, `dev`, `production` or `prod`
 - `KEYCLOAK_REALMS`, `KEYCLOAK_STAFF_REALM_NAME`, `KEYCLOAK_CUSTOMER_REALM_NAME`:
   see [Selecting Realms](#selecting-realms)
+- `KEYCLOAK_PASSKEYS_ENABLED`: `true` or `false` (default), see [Login Flow](#login-flow)
 - `KEYCLOAK_URL`: internal Keycloak URL, for example `http://keycloak:8080`
 - `HOSTNAME`: external application hostname used in realm/client configuration
 - `KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME`

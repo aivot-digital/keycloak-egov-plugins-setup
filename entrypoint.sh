@@ -218,6 +218,9 @@ realms="${KEYCLOAK_REALMS:-master,staff,customer}"
 IFS=',' read -ra realm_templates <<< "${realms// /}"
 export KEYCLOAK_STAFF_REALM_NAME="${KEYCLOAK_STAFF_REALM_NAME:-staff}"
 export KEYCLOAK_CUSTOMER_REALM_NAME="${KEYCLOAK_CUSTOMER_REALM_NAME:-customer}"
+# Passkey login is an optional alternative to password and OTP and stays off
+# unless enabled.
+export KEYCLOAK_PASSKEYS_ENABLED="${KEYCLOAK_PASSKEYS_ENABLED:-false}"
 
 # Validate before contacting Keycloak, so misconfigurations fail without waiting
 # for the credential check.
@@ -247,7 +250,15 @@ if [ "${KEYCLOAK_STAFF_REALM_NAME}" = "${KEYCLOAK_CUSTOMER_REALM_NAME}" ]; then
     exit 1
 fi
 
-echo "Selected realms: ${realm_templates[*]} (staff realm name: ${KEYCLOAK_STAFF_REALM_NAME}, customer realm name: ${KEYCLOAK_CUSTOMER_REALM_NAME})"
+case "${KEYCLOAK_PASSKEYS_ENABLED}" in
+    true|false) ;;
+    *)
+        echo "Invalid KEYCLOAK_PASSKEYS_ENABLED '${KEYCLOAK_PASSKEYS_ENABLED}'. Use 'true' or 'false'."
+        exit 1
+        ;;
+esac
+
+echo "Selected realms: ${realm_templates[*]} (staff realm name: ${KEYCLOAK_STAFF_REALM_NAME}, customer realm name: ${KEYCLOAK_CUSTOMER_REALM_NAME}, passkeys enabled: ${KEYCLOAK_PASSKEYS_ENABLED})"
 
 bootstrap_required=false
 

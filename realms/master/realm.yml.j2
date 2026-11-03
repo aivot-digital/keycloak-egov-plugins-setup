@@ -167,8 +167,12 @@ browserFlow: "username und otp"
 browserFlow: "browser"
 {% endif %}
 
-# Erlaube Passkeys als Authentifizierungsmethode (wird von Keycloak Config CLI v.6.4.0-26.1.0 nicht unterstützt)
-# webAuthnPolicyPasswordlessPasskeysEnabled: true
+# Erlaube Passkeys als optionale Alternative zu Passwort und OTP (KEYCLOAK_PASSKEYS_ENABLED, Standard: false)
+webAuthnPolicyPasswordlessPasskeysEnabled: $(env:KEYCLOAK_PASSKEYS_ENABLED)
+# Ein Passkey ersetzt Passwort und OTP nur mit Nutzerverifizierung (PIN oder Biometrie) als zweitem Faktor
+webAuthnPolicyPasswordlessUserVerificationRequirement: "required"
+# Die Passkey-Auswahl im Login-Formular setzt auffindbare Credentials voraus
+webAuthnPolicyPasswordlessRequireResidentKey: "Yes"
 
 {% if additional_authenticator_configs is defined and additional_authenticator_configs|length > 0 %}
 authenticatorConfig:
