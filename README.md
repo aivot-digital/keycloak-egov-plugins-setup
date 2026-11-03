@@ -103,6 +103,15 @@ passkey. A passkey login skips the OTP step, because the passkey policy requires
 user verification (PIN or biometrics). Users register passkeys in the account
 console. Password and OTP keep working for everyone.
 
+## Identity Provider Certificates
+
+Identity providers with a `metadata_descriptor_url` in their `meta.json` get
+certificate changes automatically. Providers without one (currently Mein
+Unternehmenskonto) list their signing certificates in `signing_certificates`,
+which Keycloak receives as a comma-separated list. When a provider announces a new
+certificate, add it to the list before the switch so both are accepted, and
+remove the old one after the switch.
+
 ## Configuration Layout
 
 - `master/bootstrap-master.yml`: minimal first-run setup for the deployment client

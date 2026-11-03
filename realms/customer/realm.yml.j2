@@ -362,7 +362,8 @@ identityProviders:
       {% if idp.want_assertions_encrypted %}encryptionAlgorithm: "RSA-OAEP"{% endif %}
       forceAuthn: "true"
       validateSignature: "true"
-      {% if env.signing_certificate is not none %}signingCertificate: "{{ env.signing_certificate }}"{% endif %}
+      {# Keycloak akzeptiert mehrere Zertifikate kommagetrennt, z. B. altes und neues Zertifikat während eines Wechsels #}
+      {% if env.signing_certificates is not none %}signingCertificate: "{{ env.signing_certificates | join(',') }}"{% endif %}
       {% if env.metadata_descriptor_url is not none %}metadataDescriptorUrl: "{{ env.metadata_descriptor_url }}"{% endif %}
       useMetadataDescriptorUrl: "{% if env.metadata_descriptor_url is not none %}true{% else %}false{% endif %}"
       signSpMetadata: "false"
