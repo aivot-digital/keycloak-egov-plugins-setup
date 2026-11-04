@@ -339,16 +339,18 @@ users:
     notBefore: 0
     groups: [ ]
 
-# Neue Nutzer:innen müssen beim ersten Login Recovery Codes erzeugen (nur in Produktion, wie der OTP-Zwang).
-# Standardaktionen gelten nur für neu angelegte Nutzer:innen, bestehende brauchen die Aktion einmalig manuell.
+# Nach der OTP-Einrichtung müssen Nutzer:innen Recovery Codes erzeugen (nur in Produktion, wie der OTP-Zwang).
+# Der Login-Flow erzwingt die OTP-Einrichtung bei allen neuen Nutzer:innen, auch beim ersten Admin.
+# Bestehende Nutzer:innen mit OTP brauchen die Aktion "Recovery Authentication Codes" einmalig manuell.
 requiredActions:
-  - alias: "CONFIGURE_RECOVERY_AUTHN_CODES"
-    name: "Recovery Authentication Codes"
-    providerId: "CONFIGURE_RECOVERY_AUTHN_CODES"
+  - alias: "CONFIGURE_TOTP"
+    name: "Configure OTP"
+    providerId: "CONFIGURE_TOTP"
     enabled: true
-    defaultAction: {% if is_prod %}true{% else %}false{% endif %}
-    priority: 130
-    config: {}
+    defaultAction: false
+    priority: 10
+    config:
+      add-recovery-codes: "{% if is_prod %}true{% else %}false{% endif %}"
 
 # Lege die Authentifizierungsflüsse für den Realm fest
 authenticationFlows:

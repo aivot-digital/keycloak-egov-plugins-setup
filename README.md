@@ -133,11 +133,15 @@ checks the scheme of that URL, so internal plain-HTTP calls (setup sidecar,
 backend) keep working. With an `http://` hostname, Keycloak rejects logins and
 token requests in every realm, including the master realm admin console.
 
-In production, new users in the staff and master realms must create recovery
-codes on their first login (default required action). Keycloak applies default
-required actions only when a user is created, so users that already exist need
-the "Recovery Authentication Codes" required action assigned once in the admin
-console.
+In production, users in the staff and master realms must create recovery codes
+right after setting up OTP ("Add Recovery Codes" option of the OTP setup). As the
+login flow forces OTP setup, this covers every new user, including the initial
+admin. Users that already have OTP need the "Recovery Authentication Codes"
+required action assigned once in the admin console.
+
+When removing a user's OTP (for example after a lost device), also assign the
+"Configure OTP" required action. Otherwise the user can keep logging in with
+password and recovery codes without setting up OTP again.
 
 ## Building The Setup Image
 
