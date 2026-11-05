@@ -6,6 +6,10 @@ displayNameHtml: "<div class=\"kc-logo-text\"><span>Prosuna Mitarbeiter:innen</s
 # Aktiviere den Realm
 enabled: true
 
+# Erzwinge HTTPS für alle Anfragen in Produktion, dort läuft Keycloak immer hinter einem Proxy mit https-Hostname (KC_HOSTNAME).
+# Die Entwicklungsumgebung läuft unter http://localhost, daher gilt dort nur "external".
+sslRequired: {% if is_prod %}"all"{% else %}"external"{% endif %}
+
 # Verbiete die Selbstverwaltung von Nutzer:innen
 userManagedAccessAllowed: false
 # Verbiete die Nutzung von Organisationen
@@ -248,6 +252,7 @@ clients:
     frontchannelLogout: false
     clientAuthenticatorType: "client-secret"
     secret: "$(env:BACKEND_CLIENT_SECRET)"
+    fullScopeAllowed: false # Nur die unter clientScopeMappings freigegebenen Rollen landen im Token
     defaultClientScopes: []  # Setze keine standardmäßigen Scopes
     optionalClientScopes: []  # Setze keine optionalen Scopes
     attributes:
@@ -276,6 +281,7 @@ clients:
       - "profile"
       - "email"
     optionalClientScopes: [] # Setze keine optionalen Scopes
+    fullScopeAllowed: false # Keine Rollen im Token, da die App sie nicht auswertet
     publicClient: true # Setzt "Client authentication" auf False
     standardFlowEnabled: true
     implicitFlowEnabled: false
@@ -289,6 +295,22 @@ clients:
       frontchannel.logout.session.required: true # Setzt "Frontchannel Logout Session Required" auf True
       pkce.code.challenge.method: "S256" # Setzt "PKCE Code Challenge Method" auf S256
       post.logout.redirect.uris: "$(env:HOSTNAME)/api/auth/*" # Setzt die Post-Logout-Redirect-URIs
+
+# Lege fest, welche Client-Rollen in die Tokens der Clients ohne Full Scope gelangen.
+# keycloak-config-cli entfernt alle hier nicht aufgeführten Zuordnungen, daher muss auch die Keycloak-Standardzuordnung
+# für die Account Console erhalten bleiben.
+clientScopeMappings:
+  account:
+    - client: "account-console"
+      roles:
+        - "manage-account"
+        - "view-groups"
+  # Die Admin-API prüft die Rollen im Token des Backends, ohne diese Zuordnung schlägt die Nutzer-Synchronisation fehl
+  realm-management:
+    - client: "backend"
+      roles:
+        - "view-users"
+        - "manage-users"
 
 # Limitiere die standardmäßig zugewiesenen Client-Scopes
 defaultDefaultClientScopes:
@@ -316,6 +338,19 @@ users:
         - "manage-users"
     notBefore: 0
     groups: [ ]
+
+# Nach der OTP-Einrichtung müssen Nutzer:innen Recovery Codes erzeugen (nur in Produktion, wie der OTP-Zwang).
+# Der Login-Flow erzwingt die OTP-Einrichtung bei allen neuen Nutzer:innen, auch beim ersten Admin.
+# Bestehende Nutzer:innen mit OTP brauchen die Aktion "Recovery Authentication Codes" einmalig manuell.
+requiredActions:
+  - alias: "CONFIGURE_TOTP"
+    name: "Configure OTP"
+    providerId: "CONFIGURE_TOTP"
+    enabled: true
+    defaultAction: false
+    priority: 10
+    config:
+      add-recovery-codes: "{% if is_prod %}true{% else %}false{% endif %}"
 
 # Lege die Authentifizierungsflüsse für den Realm fest
 authenticationFlows:
@@ -346,8 +381,12 @@ browserFlow: "username und otp"
 browserFlow: "browser"
 {% endif %}
 
-# Erlaube Passkeys als Authentifizierungsmethode (wird von Keycloak Config CLI v.6.4.0-26.1.0 nicht unterstützt)
-# webAuthnPolicyPasswordlessPasskeysEnabled: true
+# Erlaube Passkeys als optionale Alternative zu Passwort und OTP (KEYCLOAK_PASSKEYS_ENABLED, Standard: false)
+webAuthnPolicyPasswordlessPasskeysEnabled: $(env:KEYCLOAK_PASSKEYS_ENABLED)
+# Ein Passkey ersetzt Passwort und OTP nur mit Nutzerverifizierung (PIN oder Biometrie) als zweitem Faktor
+webAuthnPolicyPasswordlessUserVerificationRequirement: "required"
+# Die Passkey-Auswahl im Login-Formular setzt auffindbare Credentials voraus
+webAuthnPolicyPasswordlessRequireResidentKey: "Yes"
 
 {% if additional_authenticator_configs is defined and additional_authenticator_configs|length > 0 %}
 authenticatorConfig:

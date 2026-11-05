@@ -6,6 +6,10 @@ displayNameHtml: "<div class=\"kc-logo-text\"><span>Keycloak Administration</spa
 # Aktiviere den Realm
 enabled: true
 
+# Erzwinge HTTPS für alle Anfragen in Produktion, dort läuft Keycloak immer hinter einem Proxy mit https-Hostname (KC_HOSTNAME).
+# Die Entwicklungsumgebung läuft unter http://localhost, daher gilt dort nur "external".
+sslRequired: {% if is_prod %}"all"{% else %}"external"{% endif %}
+
 # Verbiete die Registrierung neuer Nutzer:innen sodass nur Administrator:innen Nutzer:innen anlegen können
 registrationAllowed: false
 # Verbiete das Zurücksetzen von Passwörtern durch Nutzer:innen
@@ -64,7 +68,7 @@ minimumQuickLoginWaitSeconds: 60 # 1 Minute
 
 # Setzte die Session Einstellungen um Mitarbeiter:innen nicht unnötig oft abzumelden
 ssoSessionIdleTimeout: 1800 # 30 Minuten
-ssoSessionMaxLifespan: 36000 # 10 Stunden
+ssoSessionMaxLifespan: 14400 # 4 Stunden
 ssoSessionIdleTimeoutRememberMe: 0 # Remember Me ist deaktiviert
 ssoSessionMaxLifespanRememberMe: 0 # Remember Me ist deaktiviert
 accessCodeLifespan: 60 # 1 Minute
@@ -123,6 +127,19 @@ users:
         value: "$(env:KEYCLOAK_ADMIN_PASSWORD)"
         temporary: true
 
+# Nach der OTP-Einrichtung müssen Nutzer:innen Recovery Codes erzeugen (nur in Produktion, wie der OTP-Zwang).
+# Der Login-Flow erzwingt die OTP-Einrichtung bei allen neuen Nutzer:innen, auch beim ersten Admin.
+# Bestehende Nutzer:innen mit OTP brauchen die Aktion "Recovery Authentication Codes" einmalig manuell.
+requiredActions:
+  - alias: "CONFIGURE_TOTP"
+    name: "Configure OTP"
+    providerId: "CONFIGURE_TOTP"
+    enabled: true
+    defaultAction: false
+    priority: 10
+    config:
+      add-recovery-codes: "{% if is_prod %}true{% else %}false{% endif %}"
+
 # Lege die Authentifizierungsflüsse für den Realm fest
 authenticationFlows:
   {% for flow in flows %}
@@ -152,8 +169,12 @@ browserFlow: "username und otp"
 browserFlow: "browser"
 {% endif %}
 
-# Erlaube Passkeys als Authentifizierungsmethode (wird von Keycloak Config CLI v.6.4.0-26.1.0 nicht unterstützt)
-# webAuthnPolicyPasswordlessPasskeysEnabled: true
+# Erlaube Passkeys als optionale Alternative zu Passwort und OTP (KEYCLOAK_PASSKEYS_ENABLED, Standard: false)
+webAuthnPolicyPasswordlessPasskeysEnabled: $(env:KEYCLOAK_PASSKEYS_ENABLED)
+# Ein Passkey ersetzt Passwort und OTP nur mit Nutzerverifizierung (PIN oder Biometrie) als zweitem Faktor
+webAuthnPolicyPasswordlessUserVerificationRequirement: "required"
+# Die Passkey-Auswahl im Login-Formular setzt auffindbare Credentials voraus
+webAuthnPolicyPasswordlessRequireResidentKey: "Yes"
 
 {% if additional_authenticator_configs is defined and additional_authenticator_configs|length > 0 %}
 authenticatorConfig:

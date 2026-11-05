@@ -91,6 +91,27 @@ Notes:
   (`$HOSTNAME/idp/realms/<name>`). Renaming it requires registering the new entity
   ID with the identity providers.
 
+## Login Flow
+
+In production, the staff and master realms use the flow `username und otp`
+(`realms/*/authentication-flows/password-otp.yml`): username and password, then
+an OTP or a recovery code. Users without OTP must set it up during login.
+Development uses the Keycloak default `browser` flow.
+
+With `KEYCLOAK_PASSKEYS_ENABLED=true`, the login form also offers sign-in with a
+passkey. A passkey login skips the OTP step, because the passkey policy requires
+user verification (PIN or biometrics). Users register passkeys in the account
+console. Password and OTP keep working for everyone.
+
+## Identity Provider Certificates
+
+Identity providers with a `metadata_descriptor_url` in their `meta.json` get
+certificate changes automatically. Providers without one (currently Mein
+Unternehmenskonto) list their signing certificates in `signing_certificates`,
+which Keycloak receives as a comma-separated list. When a provider announces a new
+certificate, add it to the list before the switch so both are accepted, and
+remove the old one after the switch.
+
 ## Configuration Layout
 
 - `master/bootstrap-master.yml`: minimal first-run setup for the deployment client
@@ -106,6 +127,22 @@ The Docker build runs `build.py` and copies the generated files into `/configs`.
 At runtime, `ENVIRONMENT=development` uses `/configs/dev`; `ENVIRONMENT=production`
 uses `/configs/prod`.
 
+In production, all realms require HTTPS for every request (`sslRequired: all`).
+Keycloak must run with `KC_HOSTNAME` set to its public `https://` URL. Keycloak
+checks the scheme of that URL, so internal plain-HTTP calls (setup sidecar,
+backend) keep working. With an `http://` hostname, Keycloak rejects logins and
+token requests in every realm, including the master realm admin console.
+
+In production, users in the staff and master realms must create recovery codes
+right after setting up OTP ("Add Recovery Codes" option of the OTP setup). As the
+login flow forces OTP setup, this covers every new user, including the initial
+admin. Users that already have OTP need the "Recovery Authentication Codes"
+required action assigned once in the admin console.
+
+When removing a user's OTP (for example after a lost device), also assign the
+"Configure OTP" required action. Otherwise the user can keep logging in with
+password and recovery codes without setting up OTP again.
+
 ## Building The Setup Image
 
 ```bash
@@ -117,6 +154,7 @@ docker build -t keycloak-egov-plugins-setup .
 - `ENVIRONMENT`: `development`, `dev`, `production` or `prod`
 - `KEYCLOAK_REALMS`, `KEYCLOAK_STAFF_REALM_NAME`, `KEYCLOAK_CUSTOMER_REALM_NAME`:
   see [Selecting Realms](#selecting-realms)
+- `KEYCLOAK_PASSKEYS_ENABLED`: `true` or `false` (default), see [Login Flow](#login-flow)
 - `KEYCLOAK_URL`: internal Keycloak URL, for example `http://keycloak:8080`
 - `HOSTNAME`: external application hostname used in realm/client configuration
 - `KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME`
