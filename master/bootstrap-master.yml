@@ -20,7 +20,9 @@ clients:
     frontchannelLogout: false
     clientAuthenticatorType: "client-secret"
     secret: "$(env:KEYCLOAK_DEPLOYMENT_CLIENT_SECRET)"
-    defaultClientScopes: [ ]
+    # Ab Keycloak 26.8 akzeptiert die Admin-API nur Tokens mit ihrer Audience, die dieser Scope hinzufügt
+    defaultClientScopes:
+      - "kc-admin-api"
     optionalClientScopes: [ ]
     attributes:
       standard.token.exchange.enabled: false # Setzt "Standard Token Exchange" auf False

@@ -50,6 +50,20 @@ To inspect logs:
 docker compose -f docker-compose.test.yml logs -f keycloak-setup
 ```
 
+### Upgrading To Keycloak 26.8.2
+
+Since 26.8.2 the Admin REST API only accepts tokens with the `kc-admin-api`
+client scope. New installations get it through the bootstrap import. Systems set
+up before 26.8.2 skip the bootstrap import, so their deployment client lacks the
+scope and the setup fails with `401 Unauthorized`. Add it once by hand before
+the first setup run on 26.8.2:
+
+1. Log in to the admin console of the `master` realm.
+2. Open Clients → the deployment client → Client scopes → Add client scope.
+3. Select `kc-admin-api` and add it as `Default`.
+
+The setup then adds the scope to the staff realm `backend` client itself.
+
 ## Bootstrap Flow
 
 The initial setup needs the temporary Keycloak bootstrap admin to create the

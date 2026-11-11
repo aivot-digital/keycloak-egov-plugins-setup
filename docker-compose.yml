@@ -1,6 +1,6 @@
 services:
   keycloak:
-    image: ghcr.io/aivot-digital/keycloak-egov-plugins:26.4.7.0
+    image: ghcr.io/aivot-digital/keycloak-egov-plugins:26.8.2.0
     restart: always
     command: [ 'start-dev' ]
     environment:
@@ -15,7 +15,7 @@ services:
       - "8080:8080"
 
   keycloak-setup:
-    image: ghcr.io/aivot-digital/keycloak-egov-plugins-setup:0.0.12
+    image: ghcr.io/aivot-digital/keycloak-egov-plugins-setup:0.0.29
     depends_on:
       - keycloak
     restart: on-failure

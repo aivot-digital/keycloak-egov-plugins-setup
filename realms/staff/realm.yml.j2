@@ -253,7 +253,9 @@ clients:
     clientAuthenticatorType: "client-secret"
     secret: "$(env:BACKEND_CLIENT_SECRET)"
     fullScopeAllowed: false # Nur die unter clientScopeMappings freigegebenen Rollen landen im Token
-    defaultClientScopes: []  # Setze keine standardmäßigen Scopes
+    # Ab Keycloak 26.8 akzeptiert die Admin-API nur Tokens mit ihrer Audience, die dieser Scope hinzufügt
+    defaultClientScopes:
+      - "kc-admin-api"
     optionalClientScopes: []  # Setze keine optionalen Scopes
     attributes:
       standard.token.exchange.enabled: false # Setzt "Standard Token Exchange" auf False
