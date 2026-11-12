@@ -1,0 +1,9 @@
+# Gibt dem Deployment-Client die admin-Rolle frei, bevor der Master-Realm-Import Full Scope abschaltet.
+# Eigener Import, weil keycloak-config-cli Clients vor Scope-Zuordnungen aktualisiert und die Admin-API
+# bei jedem Aufruf die aktuellen Scopes des Clients prüft. In einem Import wäre der Client dazwischen ausgesperrt.
+realm: "master"
+
+scopeMappings:
+  - client: "$(env:KEYCLOAK_DEPLOYMENT_CLIENT_NAME)"
+    roles:
+      - "admin"

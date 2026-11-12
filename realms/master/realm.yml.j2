@@ -103,6 +103,12 @@ adminEventsDetailsEnabled: false
 attributes:
   adminEventsExpiration: "31536000"
 
+# Der Deployment-Client wird beim Bootstrap angelegt (master/bootstrap-master.yml), hier nur die Einstellungen,
+# die auch bestehende Installationen bekommen sollen. Nicht aufgeführte Felder (z.B. das Secret) bleiben unverändert.
+clients:
+  - clientId: "$(env:KEYCLOAK_DEPLOYMENT_CLIENT_NAME)"
+    fullScopeAllowed: false # Nur die in master/deployment-client-scope.yml freigegebene admin-Rolle gilt
+
 users:
   # Deaktiviere den Standard-Admin Benutzer
   - username: "$(env:KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME)"
