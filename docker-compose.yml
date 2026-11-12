@@ -15,7 +15,7 @@ services:
       - "8080:8080"
 
   keycloak-setup:
-    image: ghcr.io/aivot-digital/keycloak-egov-plugins-setup:0.0.29
+    image: ghcr.io/aivot-digital/keycloak-egov-plugins-setup:0.0.30
     depends_on:
       - keycloak
     restart: on-failure
