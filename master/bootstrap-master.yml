@@ -20,19 +20,12 @@ clients:
     frontchannelLogout: false
     clientAuthenticatorType: "client-secret"
     secret: "$(env:KEYCLOAK_DEPLOYMENT_CLIENT_SECRET)"
-    fullScopeAllowed: false # Nur die unter scopeMappings freigegebenen Rollen landen im Token
     defaultClientScopes: [ ]
     optionalClientScopes: [ ]
     attributes:
       standard.token.exchange.enabled: false # Setzt "Standard Token Exchange" auf False
       oidc.ciba.grant.enabled: false # Setzt "OIDC CIBA Grant" auf False
       oauth2.device.authorization.grant.enabled: false # Setzt "OAuth2 Device Authorization Grant" auf False
-
-# Die Admin-API prüft die Rollen im Token, ohne diese Zuordnung schlägt das Deployment fehl
-scopeMappings:
-  - client: "$(env:KEYCLOAK_DEPLOYMENT_CLIENT_NAME)"
-    roles:
-      - "admin"
 
 # Konfiguriere den Service-Account Benutzer für den Deployment-Service
 users:

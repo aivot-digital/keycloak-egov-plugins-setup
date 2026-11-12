@@ -280,6 +280,13 @@ fi
 # Apply the selected realms in the configured order. The default puts master
 # first because it owns the deployment client/admin users.
 for realm in "${realm_templates[@]}"; do
+    # The master import disables full scope for the deployment client, so its
+    # admin scope mapping must exist before that import starts.
+    if [ "${realm}" = "master" ] && ! run_deployment_import "deployment client scope" /configs/deployment-client-scope.yml; then
+        echo "Failed to apply deployment client scope mapping"
+        exit 1
+    fi
+
     if ! run_deployment_import "${realm}" "${configs_dir}/${realm}.yml"; then
         echo "Failed to apply ${realm} realm configuration"
         exit 1

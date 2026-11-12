@@ -37,8 +37,8 @@ ENV IMPORT_VARSUBSTITUTION_ENABLED=true
 # Copy the generated configuration files from the builder stage
 COPY --from=builder /app/.generated /configs
 
-# Copy master realm specific configuration files
-COPY ./master/bootstrap-master.yml /configs/bootstrap-master.yml
+# Copy master realm specific configuration files (bootstrap and deployment client scope)
+COPY ./master/ /configs/
 
 # Copy entrypoint script
 COPY ./entrypoint.sh /opt/keycloak-config-cli/entrypoint.sh

@@ -107,13 +107,7 @@ attributes:
 # die auch bestehende Installationen bekommen sollen. Nicht aufgeführte Felder (z.B. das Secret) bleiben unverändert.
 clients:
   - clientId: "$(env:KEYCLOAK_DEPLOYMENT_CLIENT_NAME)"
-    fullScopeAllowed: false # Nur die unter scopeMappings freigegebenen Rollen landen im Token
-
-# Die Admin-API prüft die Rollen im Token, ohne diese Zuordnung schlägt das Deployment fehl
-scopeMappings:
-  - client: "$(env:KEYCLOAK_DEPLOYMENT_CLIENT_NAME)"
-    roles:
-      - "admin"
+    fullScopeAllowed: false # Nur die in master/deployment-client-scope.yml freigegebene admin-Rolle gilt
 
 users:
   # Deaktiviere den Standard-Admin Benutzer
