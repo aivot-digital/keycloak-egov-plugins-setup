@@ -221,6 +221,8 @@ export KEYCLOAK_CUSTOMER_REALM_NAME="${KEYCLOAK_CUSTOMER_REALM_NAME:-customer}"
 # Passkey login is an optional alternative to password and OTP and stays off
 # unless enabled.
 export KEYCLOAK_PASSKEYS_ENABLED="${KEYCLOAK_PASSKEYS_ENABLED:-false}"
+# STARTTLS stays on unless a local test mail server without TLS is used.
+export SMTP_STARTTLS="${SMTP_STARTTLS:-true}"
 
 # Validate before contacting Keycloak, so misconfigurations fail without waiting
 # for the credential check.
@@ -258,7 +260,15 @@ case "${KEYCLOAK_PASSKEYS_ENABLED}" in
         ;;
 esac
 
-echo "Selected realms: ${realm_templates[*]} (staff realm name: ${KEYCLOAK_STAFF_REALM_NAME}, customer realm name: ${KEYCLOAK_CUSTOMER_REALM_NAME}, passkeys enabled: ${KEYCLOAK_PASSKEYS_ENABLED})"
+case "${SMTP_STARTTLS}" in
+    true|false) ;;
+    *)
+        echo "Invalid SMTP_STARTTLS '${SMTP_STARTTLS}'. Use 'true' or 'false'."
+        exit 1
+        ;;
+esac
+
+echo "Selected realms: ${realm_templates[*]} (staff realm name: ${KEYCLOAK_STAFF_REALM_NAME}, customer realm name: ${KEYCLOAK_CUSTOMER_REALM_NAME}, passkeys enabled: ${KEYCLOAK_PASSKEYS_ENABLED}, smtp starttls: ${SMTP_STARTTLS})"
 
 bootstrap_required=false
 

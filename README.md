@@ -24,16 +24,21 @@ Start the local test setup:
 docker compose -f docker-compose.test.yml up -d --build
 ```
 
+The local test setup Keycloak is then available
+at [http://localhost:8080/](http://localhost:8080/).
+
 Default test credentials:
 
 - Bootstrap admin: `admin` / `admin`
 - Configured admin: `superuser` / `My-Super-Secret-Password-No.1`
 
-The configured admin password is temporary. Keycloak will ask for a password
-change after login. It is only set when the admin user is created; later setup
-runs do not reset it (the credential is marked with `userLabel: "initial"`).
-Later runs also leave the admin's OTP and pending required actions (for example
-the forced password change) untouched.
+The configured admin password is temporary. Keycloak will ask for an email
+verification and a password change after login. It is only set when the admin
+user is created; later setup runs do not reset it (the credential is marked
+with `userLabel: "initial"`). Later runs also leave the admin's OTP and pending
+required actions (for example the forced password change) untouched.
+
+The Mailpit inbox for test emails is at [http://localhost:9025/](http://localhost:9025/).
 
 ## Updating A Running Setup
 
@@ -179,6 +184,7 @@ docker build -t keycloak-egov-plugins-setup .
 - `KEYCLOAK_ADMIN_PASSWORD`
 - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`
 - `SMTP_FROM`, `SMTP_FROM_DISPLAY`
+- `SMTP_STARTTLS`: `true` (default) or `false`, only disable for local test mail servers without TLS
 - `BACKEND_CLIENT_SECRET`
 
 The deployment client secret must stay stable between runs. If it changes in an
