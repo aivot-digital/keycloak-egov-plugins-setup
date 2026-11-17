@@ -38,7 +38,7 @@ smtpServer:
   user: "$(env:SMTP_USERNAME)"
   password: "$(env:SMTP_PASSWORD)"
   auth: "true"
-  starttls: "true"
+  starttls: "$(env:SMTP_STARTTLS)" # Standard: true, nur für lokale Test-Mailserver ohne TLS abschalten
   ssl: "false"
   replyTo: ""
   replyToDisplayName: ""

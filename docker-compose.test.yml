@@ -47,6 +47,7 @@ services:
       SMTP_PASSWORD: "my-super-secret-password"
       SMTP_FROM: "test@example.com"
       SMTP_FROM_DISPLAY: "Mail Test"
+      SMTP_STARTTLS: "false" # Mailpit bietet ohne Zertifikat kein STARTTLS an
 
       BACKEND_CLIENT_SECRET: "my-super-secret-key"
 
@@ -71,7 +72,7 @@ services:
     restart: unless-stopped
     environment:
       MP_MAX_MESSAGES: 5000
-      MP_SMTP_AUTH_ACCEPT_ANY: 1
-      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+      MP_SMTP_AUTH: "username:my-super-secret-password"
+      MP_SMTP_AUTH_ALLOW_INSECURE: true
     ports:
       - "9025:8025"
